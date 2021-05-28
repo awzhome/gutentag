@@ -13,6 +13,15 @@
 		<Version>1.0-preview.2</Version>
 		<AssemblyVersion>1.0.0.2</AssemblyVersion>
 		<FileVersion>1.0.0.2</FileVersion>
+		<PackageLicenseFile>LICENSE</PackageLicenseFile>
+		<Description>Library allowing a light-weight way to manage project versioning using Git tags.</Description>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Include="..\LICENSE">
+	    <Pack>True</Pack>
+	    <PackagePath></PackagePath>
+	  </None>
+	</ItemGroup>
 
 </Project>
