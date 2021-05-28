@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace></RootNamespace>
+    <NoWarn>CS0649;CS0169</NoWarn>
+    <NukeRootDirectory>..</NukeRootDirectory>
+    <NukeScriptDirectory>..</NukeScriptDirectory>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\AWZhome.GutenTag\BuildVersion.cs" Link="GutenTag\BuildVersion.cs" />
+    <Compile Include="..\AWZhome.GutenTag\BuildVersionFormatterExtensions.cs" Link="GutenTag\BuildVersionFormatterExtensions.cs" />
+    <Compile Include="..\AWZhome.GutenTag\BuildVersionWriter.cs" Link="GutenTag\BuildVersionWriter.cs" />
+    <Compile Include="..\AWZhome.GutenTag\FileFinder.cs" Link="GutenTag\FileFinder.cs" />
+    <Compile Include="..\AWZhome.GutenTag\GitTagParser.cs" Link="GutenTag\GitTagParser.cs" />
+    <Compile Include="..\AWZhome.GutenTag\IGitAdapter.cs" Link="GutenTag\IGitAdapter.cs" />
+    <Compile Include="..\AWZhome.GutenTag\Versioning.cs" Link="GutenTag\Versioning.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Nuke.Common" Version="5.1.2" />
+  </ItemGroup>
+
+</Project>
