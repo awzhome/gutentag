@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace AWZhome.GutenTag
 {
@@ -16,17 +17,19 @@ namespace AWZhome.GutenTag
 
     public delegate BranchVersioning BranchSpecificConfig(string branchName);
 
+    public delegate IEnumerable<string> GitExecutor(string commandLine);
+
     public class Versioning
     {
         private readonly VersioningConfig versioningConfig;
         private readonly BranchSpecificConfig branchConfig;
-        private readonly IGitAdapter gitAdapter;
+        private readonly GitExecutor gitExecutor;
 
-        public Versioning(VersioningConfig versioningConfig, BranchSpecificConfig branchConfig, IGitAdapter gitAdapter)
+        public Versioning(VersioningConfig versioningConfig, BranchSpecificConfig branchConfig, GitExecutor gitExecutor)
         {
             this.versioningConfig = versioningConfig;
             this.branchConfig = branchConfig;
-            this.gitAdapter = gitAdapter;
+            this.gitExecutor = gitExecutor;
         }
 
         public BuildVersion GetProjectVersion()
@@ -76,7 +79,7 @@ namespace AWZhome.GutenTag
             }
             else
             {
-                var versionWithoutCurrentTag = GitDescribe(correctedMatchPatterns, 
+                var versionWithoutCurrentTag = GitDescribe(correctedMatchPatterns,
                     (currentVersion.BasedOnGitTag != null) ? new[] { currentVersion.BasedOnGitTag } : null);
 
                 if (versionWithoutCurrentTag.Major == currentVersion.Major
@@ -93,12 +96,12 @@ namespace AWZhome.GutenTag
 
         private bool GitHasCleanWorkingCopy()
         {
-            return !gitAdapter.Execute("status --short").Any();
+            return !gitExecutor?.Invoke("status --short")?.Any() ?? false;
         }
 
         private string GitCurrentBranch()
         {
-            return gitAdapter.Execute("rev-parse --abbrev-ref HEAD").Single();
+            return gitExecutor?.Invoke("rev-parse --abbrev-ref HEAD")?.SingleOrDefault();
         }
 
         private BuildVersion GitDescribe(string[] matches = null, string[] excludes = null)
@@ -113,7 +116,7 @@ namespace AWZhome.GutenTag
             {
                 excludeParam += string.Join(' ', excludes.Select(e => $"--exclude \"{e}\""));
             }
-            return GitTagParser.Parse(gitAdapter.Execute($"describe --first-parent {matchParam} {excludeParam}").FirstOrDefault());
+            return GitTagParser.Parse(gitExecutor?.Invoke($"describe --first-parent {matchParam} {excludeParam}")?.FirstOrDefault(), versioningConfig);
         }
     }
 }

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -15,7 +15,6 @@
     <Compile Include="..\AWZhome.GutenTag\BuildVersionWriter.cs" Link="GutenTag\BuildVersionWriter.cs" />
     <Compile Include="..\AWZhome.GutenTag\FileFinder.cs" Link="GutenTag\FileFinder.cs" />
     <Compile Include="..\AWZhome.GutenTag\GitTagParser.cs" Link="GutenTag\GitTagParser.cs" />
-    <Compile Include="..\AWZhome.GutenTag\IGitAdapter.cs" Link="GutenTag\IGitAdapter.cs" />
     <Compile Include="..\AWZhome.GutenTag\Versioning.cs" Link="GutenTag\Versioning.cs" />
   </ItemGroup>
 

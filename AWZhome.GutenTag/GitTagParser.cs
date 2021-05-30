@@ -2,7 +2,7 @@
 {
     static class GitTagParser
     {
-        public static BuildVersion Parse(string gitTag)
+        public static BuildVersion Parse(string gitTag, VersioningConfig versioningConfig)
         {
             if (gitTag == null || gitTag.StartsWith("fatal"))
             {
@@ -37,9 +37,9 @@
                 if (baseVersionParts.Length > 0)
                 {
                     string major = baseVersionParts[0];
-                    if (major.StartsWith("v"))
+                    if (major.StartsWith(versioningConfig.ReleaseTagPrefix))
                     {
-                        major = major[1..];
+                        major = major[versioningConfig.ReleaseTagPrefix.Length..];
                     }
                     if (int.TryParse(major, out int majorNum))
                     {

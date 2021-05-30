@@ -4,9 +4,9 @@ using static Nuke.Common.Tools.Git.GitTasks;
 
 namespace AWZhome.GutenTag.Nuke
 {
-    public class NukeGitAdapter : IGitAdapter
+    public static class NukeGitAdapter
     {
-        public IEnumerable<string> Execute(string commandLine) =>
+        public static GitExecutor Executor => commandLine =>
             Git(commandLine, null, null, default, false, false, false).Select(o => o.Text);
     }
 }
