@@ -16,7 +16,7 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
 [ShutdownDotNetAfterServerBuild]
 class Build : NukeBuild
 {
-    public static int Main() => Execute<Build>(x => x.compile);
+    public static int Main() => Execute<Build>(x => x.Compile);
 
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
     readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
@@ -34,15 +34,15 @@ class Build : NukeBuild
 
     Versioning Versioning => new(new VersioningConfig(), BranchVersioningConfig, NukeGitAdapter.Executor);
 
-    Target show_version => _ => _
+    Target ShowVersion => _ => _
         .Executes(() =>
         {
             var version = Versioning.GetProjectVersion();
             Console.WriteLine($"Project version is {version.AsString()} (Assembly version: {version.AsAssemblyVersion()})");
         });
 
-    Target versionize => _ => _
-        .DependsOn(show_version)
+    Target Versionize => _ => _
+        .DependsOn(ShowVersion)
         .Executes(() =>
         {
             var version = Versioning.GetProjectVersion();
@@ -50,22 +50,22 @@ class Build : NukeBuild
             writer.WriteToVsProject(WorkingDirectory / "AWZhome.GutenTag" / "AWZhome.GutenTag.csproj");
         });
 
-    Target clean => _ => _
-        .Before(restore)
+    Target Clean => _ => _
+        .Before(Restore)
         .Executes(() =>
         {
             EnsureCleanDirectory(OutputDirectory);
         });
 
-    Target restore => _ => _
+    Target Restore => _ => _
         .Executes(() =>
         {
             DotNetRestore(s => s
                 .SetProjectFile(Solution));
         });
 
-    Target compile => _ => _
-        .DependsOn(restore)
+    Target Compile => _ => _
+        .DependsOn(Restore)
         .Executes(() =>
         {
             DotNetBuild(s => s
