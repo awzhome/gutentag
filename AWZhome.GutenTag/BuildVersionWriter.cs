@@ -35,6 +35,14 @@ namespace AWZhome.GutenTag
             WriteVersionToFiles("#define APP_FULL_VERSION \"$$$\"", version.AsString(), files);
         }
 
+        public void WriteToPackageJson(params string[] files) =>
+            WriteToPackageJson((IEnumerable<string>) files);
+
+        public void WriteToPackageJson(IEnumerable<string> files)
+        {
+            WriteVersionToFiles("\"version\": \"$$$\",", version.AsString(), files);
+        }
+
         public static void WriteVersionToFiles(string template, string version, params string[] files) => 
             WriteVersionToFiles(template, version, (IEnumerable<string>) files);
 
