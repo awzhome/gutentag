@@ -2,7 +2,7 @@
 
 namespace AWZhome.GutenTag
 {
-    public class BuildVersion : IComparable<BuildVersion>
+    public class ProjectVersion : IComparable<ProjectVersion>
     {
         public int Major { get; set; }
         public int Minor { get; set; }
@@ -13,7 +13,7 @@ namespace AWZhome.GutenTag
         public bool IsDevMark { get; set; } = false;
         public string BasedOnGitTag { get; set; }
 
-        public int CompareTo(BuildVersion other)
+        public int CompareTo(ProjectVersion other)
         {
             if (Revision == 0 && other?.Revision == 0)
             {
@@ -51,6 +51,6 @@ namespace AWZhome.GutenTag
             return 0;
         }
 
-        public static BuildVersion DefaultInitial => new() { Minor = 1, IsDevMark = true };
+        public static ProjectVersion DefaultInitial => new() { Minor = 1, IsDevMark = true };
     }
 }

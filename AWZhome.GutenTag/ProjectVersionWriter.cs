@@ -5,13 +5,13 @@ using System.Text.RegularExpressions;
 
 namespace AWZhome.GutenTag
 {
-    public class BuildVersionWriter
+    public class ProjectVersionWriter
     {
         public static UTF8Encoding UTF8WithoutBOM => new UTF8Encoding(encoderShouldEmitUTF8Identifier: false);
 
-        private readonly BuildVersion version;
+        private readonly ProjectVersion version;
 
-        public BuildVersionWriter(BuildVersion version)
+        public ProjectVersionWriter(ProjectVersion version)
         {
             this.version = version;
         }

@@ -2,9 +2,9 @@
 
 namespace AWZhome.GutenTag
 {
-    public static class BuildVersionFormatterExtensions
+    public static class ProjectVersionFormatterExtensions
     {
-        public static string AsString(this BuildVersion version)
+        public static string AsString(this ProjectVersion version)
         {
             StringBuilder sb = new();
             sb.Append(version.Major);
@@ -29,7 +29,7 @@ namespace AWZhome.GutenTag
             return sb.ToString();
         }
 
-        public static string AsAssemblyVersion(this BuildVersion version)
+        public static string AsAssemblyVersion(this ProjectVersion version)
         {
             return $"{version.Major}.{version.Minor}.{version.Patch}.{version.AssemblyRevision}";
         }

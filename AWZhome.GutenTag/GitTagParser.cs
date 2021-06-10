@@ -2,14 +2,14 @@
 {
     public static class GitTagParser
     {
-        public static BuildVersion Parse(string gitTag, VersioningConfig versioningConfig)
+        public static ProjectVersion Parse(string gitTag, VersioningConfig versioningConfig)
         {
             if (gitTag == null || gitTag.StartsWith("fatal"))
             {
-                return BuildVersion.DefaultInitial;
+                return ProjectVersion.DefaultInitial;
             }
 
-            BuildVersion resultVersion = new();
+            ProjectVersion resultVersion = new();
 
             /*
              * git describe tag formats:
@@ -30,7 +30,7 @@
             }
             else
             {
-                return BuildVersion.DefaultInitial;
+                return ProjectVersion.DefaultInitial;
             }
 
             resultVersion.BasedOnGitTag = gitTag;

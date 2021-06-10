@@ -32,7 +32,7 @@ namespace AWZhome.GutenTag
             this.gitExecutor = gitExecutor;
         }
 
-        public BuildVersion GetProjectVersion()
+        public ProjectVersion GetProjectVersion()
         {
             string currentBranch = GitCurrentBranch();
             var branchVersioning = branchConfig(currentBranch) ?? new();
@@ -104,7 +104,7 @@ namespace AWZhome.GutenTag
             return gitExecutor?.Invoke("rev-parse --abbrev-ref HEAD")?.SingleOrDefault();
         }
 
-        private BuildVersion GitDescribe(string[] matches = null, string[] excludes = null)
+        private ProjectVersion GitDescribe(string[] matches = null, string[] excludes = null)
         {
             string matchParam = "";
             if (matches != null)
