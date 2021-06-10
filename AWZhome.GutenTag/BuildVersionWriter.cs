@@ -7,6 +7,8 @@ namespace AWZhome.GutenTag
 {
     public class BuildVersionWriter
     {
+        public static UTF8Encoding UTF8WithoutBOM => new UTF8Encoding(encoderShouldEmitUTF8Identifier: false);
+
         private readonly BuildVersion version;
 
         public BuildVersionWriter(BuildVersion version)
@@ -44,7 +46,7 @@ namespace AWZhome.GutenTag
                 string newText = Regex.Replace(origText,
                     template.Replace("$$$", "(.*)"),
                     template.Replace("$$$", version));
-                File.WriteAllText(file, newText, Encoding.UTF8);
+                File.WriteAllText(file, newText, UTF8WithoutBOM);
             }
         }
     }
