@@ -7,15 +7,15 @@ namespace AWZhome.GutenTag
         public int Major { get; set; }
         public int Minor { get; set; }
         public int Patch { get; set; }
+        public string PreReleaseTag { get; set; }
+        public int PreReleaseNumber { get; set; }
         public int Revision { get; set; }
-        public int AssemblyRevision { get; set; }
-        public string Tag { get; set; }
         public bool IsDevMark { get; set; } = false;
         public string BasedOnGitTag { get; set; }
 
         public int CompareTo(ProjectVersion other)
         {
-            if (Revision == 0 && other?.Revision == 0)
+            if (PreReleaseNumber == 0 && other?.PreReleaseNumber == 0)
             {
                 if (!IsDevMark && other.IsDevMark)
                 {
@@ -39,14 +39,14 @@ namespace AWZhome.GutenTag
             if (patchCompare != 0)
                 return patchCompare;
 
-            int revisionCompare = Revision.CompareTo(other?.Revision);
+            int revisionCompare = PreReleaseNumber.CompareTo(other?.PreReleaseNumber);
             if (revisionCompare != 0)
                 return revisionCompare;
 
-            string normTag = Tag ?? string.Empty;
-            string normOtherTag = other?.Tag ?? string.Empty;
-            if (normTag != normOtherTag)
-                return normTag.CompareTo(normOtherTag);
+            string preReleaseTag = PreReleaseTag ?? string.Empty;
+            string otherPreReleaseTag = other?.PreReleaseTag ?? string.Empty;
+            if (preReleaseTag != otherPreReleaseTag)
+                return preReleaseTag.CompareTo(otherPreReleaseTag);
 
             return 0;
         }

@@ -22,8 +22,8 @@ namespace AWZhome.GutenTag
         public void WriteToVsProject(IEnumerable<string> files)
         {
             WriteVersionToFiles("<Version>$$$</Version>", version.AsString(), files);
-            WriteVersionToFiles("<AssemblyVersion>$$$</AssemblyVersion>", version.AsAssemblyVersion(), files);
-            WriteVersionToFiles("<FileVersion>$$$</FileVersion>", version.AsAssemblyVersion(), files);
+            WriteVersionToFiles("<AssemblyVersion>$$$</AssemblyVersion>", version.AsNumericVersion(), files);
+            WriteVersionToFiles("<FileVersion>$$$</FileVersion>", version.AsNumericVersion(), files);
         }
 
         public void WriteToInnoSetupScript(params string[] files) => 
@@ -31,7 +31,7 @@ namespace AWZhome.GutenTag
 
         public void WriteToInnoSetupScript(IEnumerable<string> files)
         {
-            WriteVersionToFiles("#define APP_VERSION \"$$$\"", version.AsAssemblyVersion(), files);
+            WriteVersionToFiles("#define APP_VERSION \"$$$\"", version.AsNumericVersion(), files);
             WriteVersionToFiles("#define APP_FULL_VERSION \"$$$\"", version.AsString(), files);
         }
 

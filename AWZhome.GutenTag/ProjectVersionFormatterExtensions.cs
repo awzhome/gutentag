@@ -15,23 +15,23 @@ namespace AWZhome.GutenTag
                 sb.Append('.');
                 sb.Append(version.Patch);
             }
-            if (version.Tag != null)
+            if (version.PreReleaseTag != null)
             {
                 sb.Append('-');
-                sb.Append(version.Tag);
-                if (version.Revision != 0)
+                sb.Append(version.PreReleaseTag);
+                if (version.PreReleaseNumber != 0)
                 {
                     sb.Append('.');
-                    sb.Append(version.Revision);
+                    sb.Append(version.PreReleaseNumber);
                 }
             }
 
             return sb.ToString();
         }
 
-        public static string AsAssemblyVersion(this ProjectVersion version)
+        public static string AsNumericVersion(this ProjectVersion version)
         {
-            return $"{version.Major}.{version.Minor}.{version.Patch}.{version.AssemblyRevision}";
+            return $"{version.Major}.{version.Minor}.{version.Patch}.{version.Revision}";
         }
     }
 }

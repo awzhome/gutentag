@@ -64,18 +64,18 @@
             }
             if (parts.Length == 2 || parts.Length == 4)
             {
-                resultVersion.Tag = parts[1];
+                resultVersion.PreReleaseTag = parts[1];
                 resultVersion.BasedOnGitTag += "-" + parts[1];
             }
             if (parts.Length > 2)
             {
                 if (int.TryParse(parts[^2], out int revisionNum))
                 {
-                    resultVersion.Revision = revisionNum;
+                    resultVersion.PreReleaseNumber = revisionNum;
                 }
             }
 
-            resultVersion.AssemblyRevision = resultVersion.Revision;
+            resultVersion.Revision = resultVersion.PreReleaseNumber;
 
             return resultVersion;
         }

@@ -45,25 +45,25 @@ namespace AWZhome.GutenTag
 
             if (currentVersion.IsDevMark)
             {
+                currentVersion.PreReleaseNumber++;
                 currentVersion.Revision++;
-                currentVersion.AssemblyRevision++;
+                correctedVersion.PreReleaseNumber++;
                 correctedVersion.Revision++;
-                correctedVersion.AssemblyRevision++;
             }
 
             if (!GitHasCleanWorkingCopy())
             {
+                currentVersion.PreReleaseNumber++;
                 currentVersion.Revision++;
-                currentVersion.AssemblyRevision++;
+                correctedVersion.PreReleaseNumber++;
                 correctedVersion.Revision++;
-                correctedVersion.AssemblyRevision++;
             }
 
-            if (currentVersion.Revision != 0)
+            if (currentVersion.PreReleaseNumber != 0)
             {
                 currentVersion = correctedVersion;
 
-                currentVersion.Tag ??= branchVersioning.Tag ?? currentBranch;
+                currentVersion.PreReleaseTag ??= branchVersioning.Tag ?? currentBranch;
 
                 if (!currentVersion.IsDevMark)
                 {
@@ -86,7 +86,7 @@ namespace AWZhome.GutenTag
                     && versionWithoutCurrentTag.Minor == currentVersion.Minor
                     && versionWithoutCurrentTag.Patch == currentVersion.Patch)
                 {
-                    currentVersion.AssemblyRevision = versionWithoutCurrentTag.Revision + 1;
+                    currentVersion.Revision = versionWithoutCurrentTag.PreReleaseNumber + 1;
                 }
 
             }
