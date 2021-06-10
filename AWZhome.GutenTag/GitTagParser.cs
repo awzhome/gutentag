@@ -1,6 +1,6 @@
 ﻿namespace AWZhome.GutenTag
 {
-    static class GitTagParser
+    public static class GitTagParser
     {
         public static BuildVersion Parse(string gitTag, VersioningConfig versioningConfig)
         {
@@ -15,32 +15,33 @@
              * git describe tag formats:
              * 
              * v2.0 (simple tag)
-             * v2.0-sometag (tag with "tag" in semver understanding)
+             * v2.0-sometag (tag with "pre-release tag" in semver understanding)
              * v2.0-sometag-30-g41e086cb (tag with semver-tag and number of commits after the tag)
              */
-            var parts = gitTag.Split('-');
-            if (parts.Length > 0)
+            var unprefixedGitTag = gitTag;
+            if (gitTag.StartsWith(versioningConfig.DevTagPrefix))
             {
-                resultVersion.BasedOnGitTag = parts[0];
-            }
-
-            if (parts.Length > 1 && parts[0] == "dev")
-            {
+                unprefixedGitTag = gitTag[versioningConfig.DevTagPrefix.Length..];
                 resultVersion.IsDevMark = true;
-                parts = parts[1..];
-                resultVersion.BasedOnGitTag += "-" + parts[0];
+            }
+            else if (gitTag.StartsWith(versioningConfig.ReleaseTagPrefix))
+            {
+                unprefixedGitTag = gitTag[versioningConfig.ReleaseTagPrefix.Length..];
+            }
+            else
+            {
+                return BuildVersion.DefaultInitial;
             }
 
+            resultVersion.BasedOnGitTag = gitTag;
+
+            var parts = unprefixedGitTag.Split('-');
             if (parts.Length > 0)
             {
                 var baseVersionParts = parts[0].Split('.');
                 if (baseVersionParts.Length > 0)
                 {
                     string major = baseVersionParts[0];
-                    if (major.StartsWith(versioningConfig.ReleaseTagPrefix))
-                    {
-                        major = major[versioningConfig.ReleaseTagPrefix.Length..];
-                    }
                     if (int.TryParse(major, out int majorNum))
                     {
                         resultVersion.Major = majorNum;
