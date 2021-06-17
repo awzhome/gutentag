@@ -34,13 +34,16 @@ namespace AWZhome.GutenTag
 
         public ProjectVersion GetProjectVersion()
         {
+            var releaseTagPrefix = versioningConfig.ReleaseTagPrefix;
+            var devTagPrefix = versioningConfig.DevTagPrefix;
+
             string currentBranch = GitCurrentBranch();
             var branchVersioning = branchConfig(currentBranch) ?? new();
-            var currentVersion = GitDescribe(new[] { $"{versioningConfig.DevTagPrefix}*", $"{versioningConfig.ReleaseTagPrefix}*" });
+            var currentVersion = GitDescribe(new[] { $"{devTagPrefix}*", $"{releaseTagPrefix}*" });
 
             var correctedMatchPatterns = branchVersioning.IncrementPatch ?
-                    new[] { "dev-[0-9999]", "v[0-9999]", "dev-[0-9999].[0-9999]", "v[0-9999].[0-9999]", "dev-[0-9999].[0-9999].[0-9999]", "v[0-9999].[0-9999].[0-9999]", } :
-                    new[] { "dev-[0-9999]", "v[0-9999]", "dev-[0-9999].[0-9999]", "v[0-9999].[0-9999]", "dev-[0-9999].[0-9999].0", "v[0-9999].[0-9999].0" };
+                    new[] { $"{devTagPrefix}[0-9999]", $"{releaseTagPrefix}[0-9999]", $"{devTagPrefix}[0-9999].[0-9999]", $"{releaseTagPrefix}[0-9999].[0-9999]", $"{devTagPrefix}[0-9999].[0-9999].[0-9999]", $"{releaseTagPrefix}[0-9999].[0-9999].[0-9999]", } :
+                    new[] { $"{devTagPrefix}[0-9999]", $"{releaseTagPrefix}[0-9999]", $"{devTagPrefix}[0-9999].[0-9999]", $"{releaseTagPrefix}[0-9999].[0-9999]", $"{devTagPrefix}[0-9999].[0-9999].0", $"{releaseTagPrefix}[0-9999].[0-9999].0" };
             var correctedVersion = GitDescribe(correctedMatchPatterns);
 
             if (currentVersion.IsDevMark)
