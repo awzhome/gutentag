@@ -33,7 +33,7 @@ jobs:
         run: ./build.sh test
 
       - name: Archive artifacts
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@v2
         with:
           name: NuGet Package
