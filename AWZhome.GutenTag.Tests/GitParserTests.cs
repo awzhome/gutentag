@@ -108,6 +108,7 @@ namespace AWZhome.GutenTag.Tests
             VersioningConfig config = new();
             var version = GitTagParser.Parse("v2.0.0", config);
 
+            Assert.Equal("v2.0.0", version.BasedOnGitTag);
             Assert.Equal(2, version.Major);
             Assert.Equal(0, version.Minor);
             Assert.Equal(0, version.Patch);
@@ -123,6 +124,7 @@ namespace AWZhome.GutenTag.Tests
             VersioningConfig config = new();
             var version = GitTagParser.Parse("v2.0.1", config);
 
+            Assert.Equal("v2.0.1", version.BasedOnGitTag);
             Assert.Equal(2, version.Major);
             Assert.Equal(0, version.Minor);
             Assert.Equal(1, version.Patch);
@@ -138,6 +140,7 @@ namespace AWZhome.GutenTag.Tests
             VersioningConfig config = new();
             var version = GitTagParser.Parse("v2.0-main", config);
 
+            Assert.Equal("v2.0-main", version.BasedOnGitTag);
             Assert.Equal(2, version.Major);
             Assert.Equal(0, version.Minor);
             Assert.Equal(0, version.Patch);
@@ -153,6 +156,7 @@ namespace AWZhome.GutenTag.Tests
             VersioningConfig config = new();
             var version = GitTagParser.Parse("v2.0.1-main", config);
 
+            Assert.Equal("v2.0.1-main", version.BasedOnGitTag);
             Assert.Equal(2, version.Major);
             Assert.Equal(0, version.Minor);
             Assert.Equal(1, version.Patch);
@@ -168,6 +172,7 @@ namespace AWZhome.GutenTag.Tests
             VersioningConfig config = new();
             var version = GitTagParser.Parse("dev-2.0.1-main", config);
 
+            Assert.Equal("dev-2.0.1-main", version.BasedOnGitTag);
             Assert.Equal(2, version.Major);
             Assert.Equal(0, version.Minor);
             Assert.Equal(1, version.Patch);
@@ -183,6 +188,7 @@ namespace AWZhome.GutenTag.Tests
             VersioningConfig config = new();
             var version = GitTagParser.Parse("v2.0-5-abcdefg", config);
 
+            Assert.Equal("v2.0", version.BasedOnGitTag);
             Assert.Equal(2, version.Major);
             Assert.Equal(0, version.Minor);
             Assert.Equal(0, version.Patch);
@@ -198,6 +204,7 @@ namespace AWZhome.GutenTag.Tests
             VersioningConfig config = new();
             var version = GitTagParser.Parse("v2.0.1-5-abcdefg", config);
 
+            Assert.Equal("v2.0.1", version.BasedOnGitTag);
             Assert.Equal(2, version.Major);
             Assert.Equal(0, version.Minor);
             Assert.Equal(1, version.Patch);
@@ -213,6 +220,7 @@ namespace AWZhome.GutenTag.Tests
             VersioningConfig config = new();
             var version = GitTagParser.Parse("v2.0.1-main-5-abcdefg", config);
 
+            Assert.Equal("v2.0.1-main", version.BasedOnGitTag);
             Assert.Equal(2, version.Major);
             Assert.Equal(0, version.Minor);
             Assert.Equal(1, version.Patch);
@@ -228,6 +236,7 @@ namespace AWZhome.GutenTag.Tests
             VersioningConfig config = new();
             var version = GitTagParser.Parse("dev-2.0.1-main-5-abcdefg", config);
 
+            Assert.Equal("dev-2.0.1-main", version.BasedOnGitTag);
             Assert.Equal(2, version.Major);
             Assert.Equal(0, version.Minor);
             Assert.Equal(1, version.Patch);

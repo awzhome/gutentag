@@ -19,21 +19,22 @@
              * v2.0-sometag-30-g41e086cb (tag with semver-tag and number of commits after the tag)
              */
             var unprefixedGitTag = gitTag;
+            string prefix = "";
             if (gitTag.StartsWith(versioningConfig.DevTagPrefix))
             {
                 unprefixedGitTag = gitTag[versioningConfig.DevTagPrefix.Length..];
                 resultVersion.IsDevMark = true;
+                prefix = versioningConfig.DevTagPrefix;
             }
             else if (gitTag.StartsWith(versioningConfig.ReleaseTagPrefix))
             {
                 unprefixedGitTag = gitTag[versioningConfig.ReleaseTagPrefix.Length..];
+                prefix = versioningConfig.ReleaseTagPrefix;
             }
             else
             {
                 return ProjectVersion.DefaultInitial;
             }
-
-            resultVersion.BasedOnGitTag = gitTag;
 
             var parts = unprefixedGitTag.Split('-');
             if (parts.Length > 0)
@@ -61,6 +62,8 @@
                         resultVersion.Patch = patchNum;
                     }
                 }
+
+                resultVersion.BasedOnGitTag = prefix + parts[0];
             }
             if (parts.Length == 2 || parts.Length == 4)
             {
