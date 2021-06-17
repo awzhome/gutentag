@@ -64,11 +64,12 @@
           "items": {
             "type": "string",
             "enum": [
-              "clean",
-              "compile",
-              "restore",
-              "show_version",
-              "versionize"
+              "Clean",
+              "Compile",
+              "Restore",
+              "ShowVersion",
+              "Test",
+              "Versionize"
             ]
           }
         },
@@ -82,11 +83,12 @@
           "items": {
             "type": "string",
             "enum": [
-              "clean",
-              "compile",
-              "restore",
-              "show_version",
-              "versionize"
+              "Clean",
+              "Compile",
+              "Restore",
+              "ShowVersion",
+              "Test",
+              "Versionize"
             ]
           }
         },

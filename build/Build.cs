@@ -46,8 +46,10 @@ class Build : NukeBuild
         .Executes(() =>
         {
             var version = Versioning.GetProjectVersion();
-            var writer = new BuildVersionWriter(version);
-            writer.WriteToVsProject(WorkingDirectory / "AWZhome.GutenTag" / "AWZhome.GutenTag.csproj");
+            var writer = new ProjectVersionWriter(version);
+            writer.WriteToVsProject(
+                WorkingDirectory / "AWZhome.GutenTag" / "AWZhome.GutenTag.csproj",
+                WorkingDirectory / "AWZhome.GutenTag.Tests" / "AWZhome.GutenTag.Tests.csproj");
         });
 
     Target Clean => _ => _
@@ -65,12 +67,20 @@ class Build : NukeBuild
         });
 
     Target Compile => _ => _
-        .DependsOn(Restore)
+        .DependsOn(Restore, Versionize)
         .Executes(() =>
         {
             DotNetBuild(s => s
                 .SetProjectFile(Solution)
                 .SetConfiguration(Configuration)
                 .EnableNoRestore());
+        });
+
+    Target Test => _ => _
+        .Executes(() =>
+        {
+            DotNetTest(s => s
+                .SetProjectFile("AWZhome.GutenTag.Tests")
+            );
         });
 }
