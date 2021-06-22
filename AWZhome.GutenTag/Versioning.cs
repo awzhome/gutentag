@@ -50,6 +50,9 @@ namespace AWZhome.GutenTag
             {
                 currentVersion.BuildNumber++;
                 currentVersion.Revision++;
+            }
+            if (correctedVersion.IsBasedOnDevMark)
+            {
                 correctedVersion.BuildNumber++;
                 correctedVersion.Revision++;
             }

@@ -424,6 +424,33 @@ namespace AWZhome.GutenTag.Tests
         }
 
         [Fact]
+        public void MajorPreReleaseAfterDevMarkForSameVersion_SamePreReleaseTag()
+        {
+            VersioningConfig versioningConfig = new();
+            static BranchVersioning branchConfig(string _) => new() { IncrementPatch = true };
+            MockedGitExecutor git = new(versioningConfig)
+            {
+                CurrentBranch = "rc",
+                HasCleanWorkingCopy = true,
+                ResultOnSimpleDescribe = "v2.0-rc",
+                ResultOnDescribeOnlyPatchMatches = "dev-2.0-5-abcdef",
+                ResultOnDescribeOnlyPatchMatchesWithExclude = (Excluding: "v2.0-rc", Result: "dev-2.0-5-abcdef")
+            };
+            Versioning versioning = new(versioningConfig, branchConfig, git);
+            var version = versioning.GetProjectVersion();
+
+            Assert.Equal("v2.0-rc", version.BasedOnGitTag);
+            Assert.Equal(2, version.Major);
+            Assert.Equal(0, version.Minor);
+            Assert.Equal(0, version.Patch);
+            Assert.Equal(0, version.BuildNumber);
+            Assert.Equal(6, version.Revision);
+            Assert.Equal("rc", version.PreReleaseTag);
+            Assert.False(version.IsBasedOnDevMark);
+            Assert.Equal(VersionType.PreRelease, version.Type);
+        }
+
+        [Fact]
         public void AfterMajorPreReleaseAfterDevMarkForSameVersion_DifferentPreReleaseTag()
         {
             VersioningConfig versioningConfig = new();
@@ -443,8 +470,62 @@ namespace AWZhome.GutenTag.Tests
             Assert.Equal(2, version.Major);
             Assert.Equal(0, version.Minor);
             Assert.Equal(0, version.Patch);
-            Assert.Equal(5, version.BuildNumber);
-            Assert.Equal(5, version.Revision);
+            Assert.Equal(6, version.BuildNumber);
+            Assert.Equal(6, version.Revision);
+            Assert.Equal("main", version.PreReleaseTag);
+            Assert.True(version.IsBasedOnDevMark);
+            Assert.Equal(VersionType.CIBuild, version.Type);
+        }
+
+        [Fact]
+        public void AfterMajorPreReleaseAfterDevMarkForSameVersion_SamePreReleaseTag()
+        {
+            VersioningConfig versioningConfig = new();
+            static BranchVersioning branchConfig(string _) => new() { IncrementPatch = true };
+            MockedGitExecutor git = new(versioningConfig)
+            {
+                CurrentBranch = "rc",
+                HasCleanWorkingCopy = true,
+                ResultOnSimpleDescribe = "v2.0-rc-1-abcdef",
+                ResultOnDescribeOnlyPatchMatches = "dev-2.0-5-abcdef",
+                ResultOnDescribeOnlyPatchMatchesWithExclude = (Excluding: "v2.0-rc", Result: "dev-2.0-5-abcdef")
+            };
+            Versioning versioning = new(versioningConfig, branchConfig, git);
+            var version = versioning.GetProjectVersion();
+
+            Assert.Equal("dev-2.0", version.BasedOnGitTag);
+            Assert.Equal(2, version.Major);
+            Assert.Equal(0, version.Minor);
+            Assert.Equal(0, version.Patch);
+            Assert.Equal(6, version.BuildNumber);
+            Assert.Equal(6, version.Revision);
+            Assert.Equal("rc", version.PreReleaseTag);
+            Assert.True(version.IsBasedOnDevMark);
+            Assert.Equal(VersionType.CIBuild, version.Type);
+        }
+
+        [Fact]
+        public void AfterMinorPreReleaseAfterMajorDevMark_DifferentPreReleaseTag()
+        {
+            VersioningConfig versioningConfig = new();
+            static BranchVersioning branchConfig(string _) => new() { IncrementPatch = true };
+            MockedGitExecutor git = new(versioningConfig)
+            {
+                CurrentBranch = "main",
+                HasCleanWorkingCopy = true,
+                ResultOnSimpleDescribe = "v2.0.1-beta-1-abcdef",
+                ResultOnDescribeOnlyPatchMatches = "dev-2.0-5-abcdef",
+                ResultOnDescribeOnlyPatchMatchesWithExclude = (Excluding: "v2.0.1-beta", Result: "dev-2.0-5-abcdef")
+            };
+            Versioning versioning = new(versioningConfig, branchConfig, git);
+            var version = versioning.GetProjectVersion();
+
+            Assert.Equal("dev-2.0", version.BasedOnGitTag);
+            Assert.Equal(2, version.Major);
+            Assert.Equal(0, version.Minor);
+            Assert.Equal(0, version.Patch);
+            Assert.Equal(6, version.BuildNumber);
+            Assert.Equal(6, version.Revision);
             Assert.Equal("main", version.PreReleaseTag);
             Assert.True(version.IsBasedOnDevMark);
             Assert.Equal(VersionType.CIBuild, version.Type);
