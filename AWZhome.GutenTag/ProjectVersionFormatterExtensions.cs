@@ -19,10 +19,10 @@ namespace AWZhome.GutenTag
             {
                 sb.Append('-');
                 sb.Append(version.PreReleaseTag);
-                if (version.PreReleaseNumber != 0)
+                if (version.BuildNumber != 0)
                 {
                     sb.Append('.');
-                    sb.Append(version.PreReleaseNumber);
+                    sb.Append(version.BuildNumber);
                 }
             }
 

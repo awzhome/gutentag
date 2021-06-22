@@ -2,20 +2,49 @@
 
 namespace AWZhome.GutenTag
 {
+    public enum VersionType
+    {
+        Release,
+        PreRelease,
+        CIBuild
+    }
+
     public class ProjectVersion : IComparable<ProjectVersion>
     {
         public int Major { get; set; }
         public int Minor { get; set; }
         public int Patch { get; set; }
         public string PreReleaseTag { get; set; }
-        public int PreReleaseNumber { get; set; }
+        public int BuildNumber { get; set; }
         public int Revision { get; set; }
         public bool IsDevMark { get; set; } = false;
         public string BasedOnGitTag { get; set; }
 
+        public VersionType Type
+        {
+            get
+            {
+                if (BuildNumber == 0)
+                {
+                    if (string.IsNullOrEmpty(PreReleaseTag))
+                    {
+                        return VersionType.Release;
+                    }
+                    else
+                    {
+                        return VersionType.PreRelease;
+                    }
+                }
+                else
+                {
+                    return VersionType.CIBuild;
+                }
+            }
+        }
+
         public int CompareTo(ProjectVersion other)
         {
-            if (PreReleaseNumber == 0 && other?.PreReleaseNumber == 0)
+            if (BuildNumber == 0 && other?.BuildNumber == 0)
             {
                 if (!IsDevMark && other.IsDevMark)
                 {
@@ -39,7 +68,7 @@ namespace AWZhome.GutenTag
             if (patchCompare != 0)
                 return patchCompare;
 
-            int revisionCompare = PreReleaseNumber.CompareTo(other?.PreReleaseNumber);
+            int revisionCompare = BuildNumber.CompareTo(other?.BuildNumber);
             if (revisionCompare != 0)
                 return revisionCompare;
 

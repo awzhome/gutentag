@@ -74,11 +74,11 @@
             {
                 if (int.TryParse(parts[^2], out int revisionNum))
                 {
-                    resultVersion.PreReleaseNumber = revisionNum;
+                    resultVersion.BuildNumber = revisionNum;
                 }
             }
 
-            resultVersion.Revision = resultVersion.PreReleaseNumber;
+            resultVersion.Revision = resultVersion.BuildNumber;
 
             return resultVersion;
         }

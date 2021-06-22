@@ -15,7 +15,7 @@ namespace AWZhome.GutenTag.Tests
             Assert.Equal(2, version.Major);
             Assert.Equal(0, version.Minor);
             Assert.Equal(0, version.Patch);
-            Assert.Equal(0, version.PreReleaseNumber);
+            Assert.Equal(0, version.BuildNumber);
             Assert.Equal(0, version.Revision);
             Assert.Null(version.PreReleaseTag);
             Assert.False(version.IsDevMark);
@@ -31,7 +31,7 @@ namespace AWZhome.GutenTag.Tests
             Assert.Equal(2, version.Major);
             Assert.Equal(0, version.Minor);
             Assert.Equal(0, version.Patch);
-            Assert.Equal(0, version.PreReleaseNumber);
+            Assert.Equal(0, version.BuildNumber);
             Assert.Equal(0, version.Revision);
             Assert.Null(version.PreReleaseTag);
             Assert.True(version.IsDevMark);
@@ -48,7 +48,7 @@ namespace AWZhome.GutenTag.Tests
             Assert.Equal(2, version.Major);
             Assert.Equal(0, version.Minor);
             Assert.Equal(0, version.Patch);
-            Assert.Equal(0, version.PreReleaseNumber);
+            Assert.Equal(0, version.BuildNumber);
             Assert.Equal(0, version.Revision);
             Assert.Null(version.PreReleaseTag);
             Assert.False(version.IsDevMark);
@@ -64,7 +64,7 @@ namespace AWZhome.GutenTag.Tests
             Assert.Equal(2, version.Major);
             Assert.Equal(0, version.Minor);
             Assert.Equal(0, version.Patch);
-            Assert.Equal(0, version.PreReleaseNumber);
+            Assert.Equal(0, version.BuildNumber);
             Assert.Equal(0, version.Revision);
             Assert.Null(version.PreReleaseTag);
             Assert.True(version.IsDevMark);
@@ -80,7 +80,7 @@ namespace AWZhome.GutenTag.Tests
             Assert.Equal(2, version.Major);
             Assert.Equal(0, version.Minor);
             Assert.Equal(0, version.Patch);
-            Assert.Equal(0, version.PreReleaseNumber);
+            Assert.Equal(0, version.BuildNumber);
             Assert.Equal(0, version.Revision);
             Assert.Null(version.PreReleaseTag);
             Assert.False(version.IsDevMark);
@@ -96,7 +96,7 @@ namespace AWZhome.GutenTag.Tests
             Assert.Equal(2, version.Major);
             Assert.Equal(0, version.Minor);
             Assert.Equal(0, version.Patch);
-            Assert.Equal(0, version.PreReleaseNumber);
+            Assert.Equal(0, version.BuildNumber);
             Assert.Equal(0, version.Revision);
             Assert.Null(version.PreReleaseTag);
             Assert.True(version.IsDevMark);
@@ -112,7 +112,7 @@ namespace AWZhome.GutenTag.Tests
             Assert.Equal(2, version.Major);
             Assert.Equal(0, version.Minor);
             Assert.Equal(0, version.Patch);
-            Assert.Equal(0, version.PreReleaseNumber);
+            Assert.Equal(0, version.BuildNumber);
             Assert.Equal(0, version.Revision);
             Assert.Null(version.PreReleaseTag);
             Assert.False(version.IsDevMark);
@@ -128,7 +128,7 @@ namespace AWZhome.GutenTag.Tests
             Assert.Equal(2, version.Major);
             Assert.Equal(0, version.Minor);
             Assert.Equal(1, version.Patch);
-            Assert.Equal(0, version.PreReleaseNumber);
+            Assert.Equal(0, version.BuildNumber);
             Assert.Equal(0, version.Revision);
             Assert.Null(version.PreReleaseTag);
             Assert.False(version.IsDevMark);
@@ -144,7 +144,7 @@ namespace AWZhome.GutenTag.Tests
             Assert.Equal(2, version.Major);
             Assert.Equal(0, version.Minor);
             Assert.Equal(0, version.Patch);
-            Assert.Equal(0, version.PreReleaseNumber);
+            Assert.Equal(0, version.BuildNumber);
             Assert.Equal(0, version.Revision);
             Assert.Equal("main", version.PreReleaseTag);
             Assert.False(version.IsDevMark);
@@ -160,7 +160,7 @@ namespace AWZhome.GutenTag.Tests
             Assert.Equal(2, version.Major);
             Assert.Equal(0, version.Minor);
             Assert.Equal(1, version.Patch);
-            Assert.Equal(0, version.PreReleaseNumber);
+            Assert.Equal(0, version.BuildNumber);
             Assert.Equal(0, version.Revision);
             Assert.Equal("main", version.PreReleaseTag);
             Assert.False(version.IsDevMark);
@@ -176,7 +176,7 @@ namespace AWZhome.GutenTag.Tests
             Assert.Equal(2, version.Major);
             Assert.Equal(0, version.Minor);
             Assert.Equal(1, version.Patch);
-            Assert.Equal(0, version.PreReleaseNumber);
+            Assert.Equal(0, version.BuildNumber);
             Assert.Equal(0, version.Revision);
             Assert.Equal("main", version.PreReleaseTag);
             Assert.True(version.IsDevMark);
@@ -192,7 +192,7 @@ namespace AWZhome.GutenTag.Tests
             Assert.Equal(2, version.Major);
             Assert.Equal(0, version.Minor);
             Assert.Equal(0, version.Patch);
-            Assert.Equal(5, version.PreReleaseNumber);
+            Assert.Equal(5, version.BuildNumber);
             Assert.Equal(5, version.Revision);
             Assert.Null(version.PreReleaseTag);
             Assert.False(version.IsDevMark);
@@ -208,7 +208,7 @@ namespace AWZhome.GutenTag.Tests
             Assert.Equal(2, version.Major);
             Assert.Equal(0, version.Minor);
             Assert.Equal(1, version.Patch);
-            Assert.Equal(5, version.PreReleaseNumber);
+            Assert.Equal(5, version.BuildNumber);
             Assert.Equal(5, version.Revision);
             Assert.Null(version.PreReleaseTag);
             Assert.False(version.IsDevMark);
@@ -224,7 +224,7 @@ namespace AWZhome.GutenTag.Tests
             Assert.Equal(2, version.Major);
             Assert.Equal(0, version.Minor);
             Assert.Equal(1, version.Patch);
-            Assert.Equal(5, version.PreReleaseNumber);
+            Assert.Equal(5, version.BuildNumber);
             Assert.Equal(5, version.Revision);
             Assert.Equal("main", version.PreReleaseTag);
             Assert.False(version.IsDevMark);
@@ -240,7 +240,7 @@ namespace AWZhome.GutenTag.Tests
             Assert.Equal(2, version.Major);
             Assert.Equal(0, version.Minor);
             Assert.Equal(1, version.Patch);
-            Assert.Equal(5, version.PreReleaseNumber);
+            Assert.Equal(5, version.BuildNumber);
             Assert.Equal(5, version.Revision);
             Assert.Equal("main", version.PreReleaseTag);
             Assert.True(version.IsDevMark);
