@@ -14,7 +14,8 @@
 		<AssemblyVersion>1.0.0.2</AssemblyVersion>
 		<FileVersion>1.0.0.2</FileVersion>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
-		<Description>Library allowing a light-weight way to manage project versioning using Git tags.</Description>
+		<Description>Library allowing a light-weight way to provide semantic versioning of projects using Git tags.</Description>
+		<PackageTags>git versioning version semver</PackageTags>
 	</PropertyGroup>
 
 	<ItemGroup>
