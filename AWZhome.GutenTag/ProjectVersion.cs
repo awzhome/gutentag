@@ -17,7 +17,7 @@ namespace AWZhome.GutenTag
         public string PreReleaseTag { get; set; }
         public int BuildNumber { get; set; }
         public int Revision { get; set; }
-        public bool IsDevMark { get; set; } = false;
+        public bool IsBasedOnDevMark { get; set; } = false;
         public string BasedOnGitTag { get; set; }
 
         public VersionType Type
@@ -46,11 +46,11 @@ namespace AWZhome.GutenTag
         {
             if (BuildNumber == 0 && other?.BuildNumber == 0)
             {
-                if (!IsDevMark && other.IsDevMark)
+                if (!IsBasedOnDevMark && other.IsBasedOnDevMark)
                 {
                     return -1;
                 }
-                else if (IsDevMark && !other.IsDevMark)
+                else if (IsBasedOnDevMark && !other.IsBasedOnDevMark)
                 {
                     return 1;
                 }
@@ -80,6 +80,6 @@ namespace AWZhome.GutenTag
             return 0;
         }
 
-        public static ProjectVersion DefaultInitial => new() { Minor = 1, IsDevMark = true };
+        public static ProjectVersion DefaultInitial => new() { Minor = 1, IsBasedOnDevMark = true };
     }
 }

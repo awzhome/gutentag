@@ -42,11 +42,11 @@ namespace AWZhome.GutenTag
             var currentVersion = GitDescribe(new[] { $"{devTagPrefix}*", $"{releaseTagPrefix}*" });
 
             var correctedMatchPatterns = branchVersioning.IncrementPatch ?
-                    new[] { $"{devTagPrefix}[0-9999]", $"{releaseTagPrefix}[0-9999]", $"{devTagPrefix}[0-9999].[0-9999]", $"{releaseTagPrefix}[0-9999].[0-9999]", $"{devTagPrefix}[0-9999].[0-9999].[0-9999]", $"{releaseTagPrefix}[0-9999].[0-9999].[0-9999]", } :
+                    new[] { $"{devTagPrefix}[0-9999]", $"{releaseTagPrefix}[0-9999]", $"{devTagPrefix}[0-9999].[0-9999]", $"{releaseTagPrefix}[0-9999].[0-9999]", $"{devTagPrefix}[0-9999].[0-9999].[0-9999]", $"{releaseTagPrefix}[0-9999].[0-9999].[0-9999]" } :
                     new[] { $"{devTagPrefix}[0-9999]", $"{releaseTagPrefix}[0-9999]", $"{devTagPrefix}[0-9999].[0-9999]", $"{releaseTagPrefix}[0-9999].[0-9999]", $"{devTagPrefix}[0-9999].[0-9999].0", $"{releaseTagPrefix}[0-9999].[0-9999].0" };
             var correctedVersion = GitDescribe(correctedMatchPatterns);
 
-            if (currentVersion.IsDevMark)
+            if (currentVersion.IsBasedOnDevMark)
             {
                 currentVersion.BuildNumber++;
                 currentVersion.Revision++;
@@ -68,7 +68,7 @@ namespace AWZhome.GutenTag
 
                 currentVersion.PreReleaseTag ??= branchVersioning.Tag ?? currentBranch;
 
-                if (!currentVersion.IsDevMark)
+                if (!currentVersion.IsBasedOnDevMark)
                 {
                     if (branchVersioning.IncrementPatch)
                     {

@@ -23,7 +23,7 @@
             if (gitTag.StartsWith(versioningConfig.DevTagPrefix))
             {
                 unprefixedGitTag = gitTag[versioningConfig.DevTagPrefix.Length..];
-                resultVersion.IsDevMark = true;
+                resultVersion.IsBasedOnDevMark = true;
                 prefix = versioningConfig.DevTagPrefix;
             }
             else if (gitTag.StartsWith(versioningConfig.ReleaseTagPrefix))
