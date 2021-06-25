@@ -530,5 +530,83 @@ namespace AWZhome.GutenTag.Tests
             Assert.True(version.IsBasedOnDevMark);
             Assert.Equal(VersionType.CIBuild, version.Type);
         }
+
+        [Fact]
+        public void BranchNormalization_Slashes()
+        {
+            VersioningConfig versioningConfig = new();
+            static BranchVersioning branchConfig(string _) => new() { IncrementPatch = false };
+            MockedGitExecutor git = new(versioningConfig)
+            {
+                CurrentBranch = "feature/any",
+                HasCleanWorkingCopy = true,
+                ResultOnSimpleDescribe = "v2.0-1-abcdef",
+                ResultOnDescribeOnlyMinorMatches = "v2.0-1-abcdef"
+            };
+            Versioning versioning = new(versioningConfig, branchConfig, git);
+            var version = versioning.GetProjectVersion();
+
+            Assert.Equal("v2.0", version.BasedOnGitTag);
+            Assert.Equal(2, version.Major);
+            Assert.Equal(1, version.Minor);
+            Assert.Equal(0, version.Patch);
+            Assert.Equal(1, version.BuildNumber);
+            Assert.Equal(1, version.Revision);
+            Assert.Equal("feature.any", version.PreReleaseTag);
+            Assert.False(version.IsBasedOnDevMark);
+            Assert.Equal(VersionType.CIBuild, version.Type);
+        }
+
+        [Fact]
+        public void BranchNormalization_Dashes()
+        {
+            VersioningConfig versioningConfig = new();
+            static BranchVersioning branchConfig(string _) => new() { IncrementPatch = false };
+            MockedGitExecutor git = new(versioningConfig)
+            {
+                CurrentBranch = "feature-any-TASK123",
+                HasCleanWorkingCopy = true,
+                ResultOnSimpleDescribe = "v2.0-1-abcdef",
+                ResultOnDescribeOnlyMinorMatches = "v2.0-1-abcdef"
+            };
+            Versioning versioning = new(versioningConfig, branchConfig, git);
+            var version = versioning.GetProjectVersion();
+
+            Assert.Equal("v2.0", version.BasedOnGitTag);
+            Assert.Equal(2, version.Major);
+            Assert.Equal(1, version.Minor);
+            Assert.Equal(0, version.Patch);
+            Assert.Equal(1, version.BuildNumber);
+            Assert.Equal(1, version.Revision);
+            Assert.Equal("feature.any.TASK123", version.PreReleaseTag);
+            Assert.False(version.IsBasedOnDevMark);
+            Assert.Equal(VersionType.CIBuild, version.Type);
+        }
+
+        [Fact]
+        public void BranchNormalization_SpecialLetters()
+        {
+            VersioningConfig versioningConfig = new();
+            static BranchVersioning branchConfig(string _) => new() { IncrementPatch = false };
+            MockedGitExecutor git = new(versioningConfig)
+            {
+                CurrentBranch = "feätüre-äny-TASK123",
+                HasCleanWorkingCopy = true,
+                ResultOnSimpleDescribe = "v2.0-1-abcdef",
+                ResultOnDescribeOnlyMinorMatches = "v2.0-1-abcdef"
+            };
+            Versioning versioning = new(versioningConfig, branchConfig, git);
+            var version = versioning.GetProjectVersion();
+
+            Assert.Equal("v2.0", version.BasedOnGitTag);
+            Assert.Equal(2, version.Major);
+            Assert.Equal(1, version.Minor);
+            Assert.Equal(0, version.Patch);
+            Assert.Equal(1, version.BuildNumber);
+            Assert.Equal(1, version.Revision);
+            Assert.Equal("feätüre.äny.TASK123", version.PreReleaseTag);
+            Assert.False(version.IsBasedOnDevMark);
+            Assert.Equal(VersionType.CIBuild, version.Type);
+        }
     }
 }

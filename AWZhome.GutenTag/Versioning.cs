@@ -69,7 +69,7 @@ namespace AWZhome.GutenTag
             {
                 currentVersion = correctedVersion;
 
-                currentVersion.PreReleaseTag ??= branchVersioning.Tag ?? currentBranch;
+                currentVersion.PreReleaseTag ??= branchVersioning.Tag ?? PreReleaseNormalizer.FromGitBranch(currentBranch);
 
                 if (!currentVersion.IsBasedOnDevMark)
                 {

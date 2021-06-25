@@ -7,7 +7,7 @@ namespace AWZhome.GutenTag
 {
     public class ProjectVersionWriter
     {
-        public static UTF8Encoding UTF8WithoutBOM => new UTF8Encoding(encoderShouldEmitUTF8Identifier: false);
+        public static UTF8Encoding UTF8WithoutBOM => new(encoderShouldEmitUTF8Identifier: false);
 
         private readonly ProjectVersion version;
 

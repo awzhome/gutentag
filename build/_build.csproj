@@ -12,6 +12,7 @@
   <ItemGroup>
     <Compile Include="..\AWZhome.GutenTag\FileFinder.cs" Link="GutenTag\FileFinder.cs" />
     <Compile Include="..\AWZhome.GutenTag\GitTagParser.cs" Link="GutenTag\GitTagParser.cs" />
+    <Compile Include="..\AWZhome.GutenTag\PreReleaseNormalizer.cs" Link="GutenTag\PreReleaseNormalizer.cs" />
     <Compile Include="..\AWZhome.GutenTag\ProjectVersion.cs" Link="GutenTag\ProjectVersion.cs" />
     <Compile Include="..\AWZhome.GutenTag\ProjectVersionFormatterExtensions.cs" Link="GutenTag\ProjectVersionFormatterExtensions.cs" />
     <Compile Include="..\AWZhome.GutenTag\ProjectVersionWriter.cs" Link="GutenTag\ProjectVersionWriter.cs" />
