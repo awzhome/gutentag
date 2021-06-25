@@ -8,15 +8,15 @@ namespace AWZhome.GutenTag.Tests
         public const string HasCleanWorkingCopyCmdLine = "status --short";
         public const string CurrentBranchCmdLine = "rev-parse --abbrev-ref HEAD";
 
-        public string SimpleDescribeCmdLine => $"describe --first-parent --match \"{devTagPrefix}*\" --match \"{releaseTagPrefix}*\"";
+        public string SimpleDescribeCmdLine => $"describe --tags --first-parent --match \"{devTagPrefix}*\" --match \"{releaseTagPrefix}*\"";
 
         public string DescribeOnlyPatchMatchesCmdLine =>
-           "describe --first-parent " + string.Join(' ', new[] {
+           "describe --tags --first-parent " + string.Join(' ', new[] {
                $"{devTagPrefix}[0-9999]", $"{releaseTagPrefix}[0-9999]", $"{devTagPrefix}[0-9999].[0-9999]", $"{releaseTagPrefix}[0-9999].[0-9999]", $"{devTagPrefix}[0-9999].[0-9999].[0-9999]", $"{releaseTagPrefix}[0-9999].[0-9999].[0-9999]"
            }.Select(m => $"--match \"{m}\""));
 
         public string DescribeOnlyMinorMatchesCmdLine =>
-           "describe --first-parent " + string.Join(' ', new[] {
+           "describe --tags --first-parent " + string.Join(' ', new[] {
                $"{devTagPrefix}[0-9999]", $"{releaseTagPrefix}[0-9999]", $"{devTagPrefix}[0-9999].[0-9999]", $"{releaseTagPrefix}[0-9999].[0-9999]", $"{devTagPrefix}[0-9999].[0-9999].0", $"{releaseTagPrefix}[0-9999].[0-9999].0"
            }.Select(m => $"--match \"{m}\""));
 

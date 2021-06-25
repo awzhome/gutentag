@@ -122,7 +122,7 @@ namespace AWZhome.GutenTag
             {
                 excludeParam += string.Join(' ', excludes.Select(e => $"--exclude \"{e}\""));
             }
-            return GitTagParser.Parse(gitExecutor?.Invoke($"describe --first-parent {matchParam} {excludeParam}")?.FirstOrDefault(), versioningConfig);
+            return GitTagParser.Parse(gitExecutor?.Invoke($"describe --tags --first-parent {matchParam} {excludeParam}")?.FirstOrDefault(), versioningConfig);
         }
     }
 }
