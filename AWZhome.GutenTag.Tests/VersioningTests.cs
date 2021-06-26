@@ -8,7 +8,7 @@ namespace AWZhome.GutenTag.Tests
         public void MajorRelease()
         {
             VersioningConfig versioningConfig = new();
-            static BranchVersioning branchConfig(string _) => new() { IncrementPatch = true };
+            static BranchVersioning branchConfig(string _) => new() { IncrementedPart = IncrementedPart.Patch };
             MockedGitExecutor git = new(versioningConfig)
             {
                 CurrentBranch = "main",
@@ -34,7 +34,7 @@ namespace AWZhome.GutenTag.Tests
         public void MajorRelease_DifferentPrefix()
         {
             VersioningConfig versioningConfig = new() { ReleaseTagPrefix = "ver-" };
-            static BranchVersioning branchConfig(string _) => new() { IncrementPatch = true };
+            static BranchVersioning branchConfig(string _) => new() { IncrementedPart = IncrementedPart.Patch };
             MockedGitExecutor git = new(versioningConfig)
             {
                 CurrentBranch = "main",
@@ -60,7 +60,7 @@ namespace AWZhome.GutenTag.Tests
         public void PatchRelease()
         {
             VersioningConfig versioningConfig = new();
-            static BranchVersioning branchConfig(string _) => new() { IncrementPatch = true };
+            static BranchVersioning branchConfig(string _) => new() { IncrementedPart = IncrementedPart.Patch };
             MockedGitExecutor git = new(versioningConfig)
             {
                 CurrentBranch = "main",
@@ -86,7 +86,7 @@ namespace AWZhome.GutenTag.Tests
         public void MajorRelease_MinorIncrement_DirtyWorkingCopy()
         {
             VersioningConfig versioningConfig = new();
-            static BranchVersioning branchConfig(string _) => new() { IncrementPatch = false };
+            static BranchVersioning branchConfig(string _) => new() { IncrementedPart = IncrementedPart.Minor };
             MockedGitExecutor git = new(versioningConfig)
             {
                 CurrentBranch = "main",
@@ -112,7 +112,7 @@ namespace AWZhome.GutenTag.Tests
         public void MajorRelease_PatchIncrement_DirtyWorkingCopy()
         {
             VersioningConfig versioningConfig = new();
-            static BranchVersioning branchConfig(string _) => new() { IncrementPatch = true };
+            static BranchVersioning branchConfig(string _) => new() { IncrementedPart = IncrementedPart.Patch };
             MockedGitExecutor git = new(versioningConfig)
             {
                 CurrentBranch = "main",
@@ -138,7 +138,7 @@ namespace AWZhome.GutenTag.Tests
         public void CommitAfterMajorRelease_MinorIncrement_CleanWorkingCopy()
         {
             VersioningConfig versioningConfig = new();
-            static BranchVersioning branchConfig(string _) => new() { IncrementPatch = false };
+            static BranchVersioning branchConfig(string _) => new() { IncrementedPart = IncrementedPart.Minor };
             MockedGitExecutor git = new(versioningConfig)
             {
                 CurrentBranch = "main",
@@ -164,7 +164,7 @@ namespace AWZhome.GutenTag.Tests
         public void CommitAfterMajorRelease_MinorIncrement_DirtyWorkingCopy()
         {
             VersioningConfig versioningConfig = new();
-            static BranchVersioning branchConfig(string _) => new() { IncrementPatch = false };
+            static BranchVersioning branchConfig(string _) => new() { IncrementedPart = IncrementedPart.Minor };
             MockedGitExecutor git = new(versioningConfig)
             {
                 CurrentBranch = "main",
@@ -190,7 +190,7 @@ namespace AWZhome.GutenTag.Tests
         public void CommitAfterMajorRelease_PatchIncrement_CleanWorkingCopy()
         {
             VersioningConfig versioningConfig = new();
-            static BranchVersioning branchConfig(string _) => new() { IncrementPatch = true };
+            static BranchVersioning branchConfig(string _) => new() { IncrementedPart = IncrementedPart.Patch };
             MockedGitExecutor git = new(versioningConfig)
             {
                 CurrentBranch = "main",
@@ -216,7 +216,7 @@ namespace AWZhome.GutenTag.Tests
         public void CommitOnDevMark()
         {
             VersioningConfig versioningConfig = new();
-            static BranchVersioning branchConfig(string _) => new() { IncrementPatch = true };
+            static BranchVersioning branchConfig(string _) => new() { IncrementedPart = IncrementedPart.Patch };
             MockedGitExecutor git = new(versioningConfig)
             {
                 CurrentBranch = "main",
@@ -242,7 +242,7 @@ namespace AWZhome.GutenTag.Tests
         public void CommitAfterDevMark()
         {
             VersioningConfig versioningConfig = new();
-            static BranchVersioning branchConfig(string _) => new() { IncrementPatch = true };
+            static BranchVersioning branchConfig(string _) => new() { IncrementedPart = IncrementedPart.Patch };
             MockedGitExecutor git = new(versioningConfig)
             {
                 CurrentBranch = "main",
@@ -268,7 +268,7 @@ namespace AWZhome.GutenTag.Tests
         public void MajorReleaseAfterDevMarkForSameVersion()
         {
             VersioningConfig versioningConfig = new();
-            static BranchVersioning branchConfig(string _) => new() { IncrementPatch = true };
+            static BranchVersioning branchConfig(string _) => new() { IncrementedPart = IncrementedPart.Patch };
             MockedGitExecutor git = new(versioningConfig)
             {
                 CurrentBranch = "main",
@@ -295,7 +295,7 @@ namespace AWZhome.GutenTag.Tests
         public void MajorReleaseAfterDevMarkForSameVersion_DifferentPrefixes()
         {
             VersioningConfig versioningConfig = new() { ReleaseTagPrefix = "ver-", DevTagPrefix = "start-" };
-            static BranchVersioning branchConfig(string _) => new() { IncrementPatch = true };
+            static BranchVersioning branchConfig(string _) => new() { IncrementedPart = IncrementedPart.Patch };
             MockedGitExecutor git = new(versioningConfig)
             {
                 CurrentBranch = "main",
@@ -322,7 +322,7 @@ namespace AWZhome.GutenTag.Tests
         public void PatchReleaseAfterMajorRelease_MinorIncrement()
         {
             VersioningConfig versioningConfig = new();
-            static BranchVersioning branchConfig(string _) => new() { IncrementPatch = false };
+            static BranchVersioning branchConfig(string _) => new() { IncrementedPart = IncrementedPart.Minor };
             MockedGitExecutor git = new(versioningConfig)
             {
                 CurrentBranch = "main",
@@ -348,7 +348,7 @@ namespace AWZhome.GutenTag.Tests
         public void AfterPatchReleaseAfterMajorRelease_PatchIncrement()
         {
             VersioningConfig versioningConfig = new();
-            static BranchVersioning branchConfig(string _) => new() { IncrementPatch = true };
+            static BranchVersioning branchConfig(string _) => new() { IncrementedPart = IncrementedPart.Patch };
             MockedGitExecutor git = new(versioningConfig)
             {
                 CurrentBranch = "main",
@@ -374,7 +374,7 @@ namespace AWZhome.GutenTag.Tests
         public void AfterPatchReleaseAfterMajorRelease_MinorIncrement()
         {
             VersioningConfig versioningConfig = new();
-            static BranchVersioning branchConfig(string _) => new() { IncrementPatch = false };
+            static BranchVersioning branchConfig(string _) => new() { IncrementedPart = IncrementedPart.Minor };
             MockedGitExecutor git = new(versioningConfig)
             {
                 CurrentBranch = "main",
@@ -400,7 +400,7 @@ namespace AWZhome.GutenTag.Tests
         public void MajorPreReleaseAfterDevMarkForSameVersion_DifferentPreReleaseTag()
         {
             VersioningConfig versioningConfig = new();
-            static BranchVersioning branchConfig(string _) => new() { IncrementPatch = true };
+            static BranchVersioning branchConfig(string _) => new() { IncrementedPart = IncrementedPart.Patch };
             MockedGitExecutor git = new(versioningConfig)
             {
                 CurrentBranch = "main",
@@ -427,7 +427,7 @@ namespace AWZhome.GutenTag.Tests
         public void MajorPreReleaseAfterDevMarkForSameVersion_SamePreReleaseTag()
         {
             VersioningConfig versioningConfig = new();
-            static BranchVersioning branchConfig(string _) => new() { IncrementPatch = true };
+            static BranchVersioning branchConfig(string _) => new() { IncrementedPart = IncrementedPart.Patch };
             MockedGitExecutor git = new(versioningConfig)
             {
                 CurrentBranch = "rc",
@@ -454,7 +454,7 @@ namespace AWZhome.GutenTag.Tests
         public void AfterMajorPreReleaseAfterDevMarkForSameVersion_DifferentPreReleaseTag()
         {
             VersioningConfig versioningConfig = new();
-            static BranchVersioning branchConfig(string _) => new() { IncrementPatch = true };
+            static BranchVersioning branchConfig(string _) => new() { IncrementedPart = IncrementedPart.Patch };
             MockedGitExecutor git = new(versioningConfig)
             {
                 CurrentBranch = "main",
@@ -481,7 +481,7 @@ namespace AWZhome.GutenTag.Tests
         public void AfterMajorPreReleaseAfterDevMarkForSameVersion_SamePreReleaseTag()
         {
             VersioningConfig versioningConfig = new();
-            static BranchVersioning branchConfig(string _) => new() { IncrementPatch = true };
+            static BranchVersioning branchConfig(string _) => new() { IncrementedPart = IncrementedPart.Patch };
             MockedGitExecutor git = new(versioningConfig)
             {
                 CurrentBranch = "rc",
@@ -508,7 +508,7 @@ namespace AWZhome.GutenTag.Tests
         public void AfterMinorPreReleaseAfterMajorDevMark_DifferentPreReleaseTag()
         {
             VersioningConfig versioningConfig = new();
-            static BranchVersioning branchConfig(string _) => new() { IncrementPatch = true };
+            static BranchVersioning branchConfig(string _) => new() { IncrementedPart = IncrementedPart.Patch };
             MockedGitExecutor git = new(versioningConfig)
             {
                 CurrentBranch = "main",
@@ -535,7 +535,7 @@ namespace AWZhome.GutenTag.Tests
         public void BranchNormalization_Slashes()
         {
             VersioningConfig versioningConfig = new();
-            static BranchVersioning branchConfig(string _) => new() { IncrementPatch = false };
+            static BranchVersioning branchConfig(string _) => new() { IncrementedPart = IncrementedPart.Minor };
             MockedGitExecutor git = new(versioningConfig)
             {
                 CurrentBranch = "feature/any",
@@ -561,7 +561,7 @@ namespace AWZhome.GutenTag.Tests
         public void BranchNormalization_Dashes()
         {
             VersioningConfig versioningConfig = new();
-            static BranchVersioning branchConfig(string _) => new() { IncrementPatch = false };
+            static BranchVersioning branchConfig(string _) => new() { IncrementedPart = IncrementedPart.Minor };
             MockedGitExecutor git = new(versioningConfig)
             {
                 CurrentBranch = "feature-any-TASK123",
@@ -587,7 +587,7 @@ namespace AWZhome.GutenTag.Tests
         public void BranchNormalization_SpecialLetters()
         {
             VersioningConfig versioningConfig = new();
-            static BranchVersioning branchConfig(string _) => new() { IncrementPatch = false };
+            static BranchVersioning branchConfig(string _) => new() { IncrementedPart = IncrementedPart.Minor };
             MockedGitExecutor git = new(versioningConfig)
             {
                 CurrentBranch = "feätüre-äny-TASK123",

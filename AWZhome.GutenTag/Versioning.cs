@@ -9,10 +9,16 @@ namespace AWZhome.GutenTag
         public string DevTagPrefix { get; init; } = "dev-";
     }
 
+    public enum IncrementedPart
+    {
+        Minor,
+        Patch
+    }
+
     public class BranchVersioning
     {
         public string Tag { get; set; }
-        public bool IncrementPatch { get; set; } = true;
+        public IncrementedPart IncrementedPart { get; set; } = IncrementedPart.Patch;
     }
 
     public delegate BranchVersioning BranchSpecificConfig(string branchName);
@@ -41,7 +47,7 @@ namespace AWZhome.GutenTag
             var branchVersioning = branchConfig(currentBranch) ?? new();
             var currentVersion = GitDescribe(new[] { $"{devTagPrefix}*", $"{releaseTagPrefix}*" });
 
-            var correctedMatchPatterns = branchVersioning.IncrementPatch ?
+            var correctedMatchPatterns = branchVersioning.IncrementedPart == IncrementedPart.Patch ?
                     new[] { $"{devTagPrefix}[0-9999]", $"{releaseTagPrefix}[0-9999]", $"{devTagPrefix}[0-9999].[0-9999]", $"{releaseTagPrefix}[0-9999].[0-9999]", $"{devTagPrefix}[0-9999].[0-9999].[0-9999]", $"{releaseTagPrefix}[0-9999].[0-9999].[0-9999]" } :
                     new[] { $"{devTagPrefix}[0-9999]", $"{releaseTagPrefix}[0-9999]", $"{devTagPrefix}[0-9999].[0-9999]", $"{releaseTagPrefix}[0-9999].[0-9999]", $"{devTagPrefix}[0-9999].[0-9999].0", $"{releaseTagPrefix}[0-9999].[0-9999].0" };
             var correctedVersion = GitDescribe(correctedMatchPatterns);
@@ -73,7 +79,7 @@ namespace AWZhome.GutenTag
 
                 if (!currentVersion.IsBasedOnDevMark)
                 {
-                    if (branchVersioning.IncrementPatch)
+                    if (branchVersioning.IncrementedPart == IncrementedPart.Patch)
                     {
                         currentVersion.Patch++;
                     }
