@@ -28,7 +28,7 @@ class Build : NukeBuild
 
     BranchSpecificConfig BranchVersioningConfig => b => b switch
     {
-        "main" => new() { Tag = "preview", IncrementPatch = false },
+        "main" => new() { Tag = "preview", IncrementedPart = IncrementedPart.Minor },
         _ => new()
     };
 
