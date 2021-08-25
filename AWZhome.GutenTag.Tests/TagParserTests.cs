@@ -3,15 +3,15 @@ using Xunit;
 
 namespace AWZhome.GutenTag.Tests
 {
-    public class GitParserTests
+    public class TagParserTests
     {
         [Fact]
         public void SimpleTag_DefaultPrefixes()
         {
             VersioningConfig config = new();
-            var version = GitTagParser.Parse("v2.0", config);
+            var version = TagParser.Parse("v2.0", config);
 
-            Assert.Equal("v2.0", version.BasedOnGitTag);
+            Assert.Equal("v2.0", version.BasedOnTag);
             Assert.Equal(2, version.Major);
             Assert.Equal(0, version.Minor);
             Assert.Equal(0, version.Patch);
@@ -25,9 +25,9 @@ namespace AWZhome.GutenTag.Tests
         public void SimpleDevTag_DefaultPrefixes()
         {
             VersioningConfig config = new();
-            var version = GitTagParser.Parse("dev-2.0", config);
+            var version = TagParser.Parse("dev-2.0", config);
 
-            Assert.Equal("dev-2.0", version.BasedOnGitTag);
+            Assert.Equal("dev-2.0", version.BasedOnTag);
             Assert.Equal(2, version.Major);
             Assert.Equal(0, version.Minor);
             Assert.Equal(0, version.Patch);
@@ -42,9 +42,9 @@ namespace AWZhome.GutenTag.Tests
         public void SimpleTag_CustomPrefixes()
         {
             VersioningConfig config = new() { ReleaseTagPrefix = "z", DevTagPrefix = "d-" };
-            var version = GitTagParser.Parse("z2.0", config);
+            var version = TagParser.Parse("z2.0", config);
 
-            Assert.Equal("z2.0", version.BasedOnGitTag);
+            Assert.Equal("z2.0", version.BasedOnTag);
             Assert.Equal(2, version.Major);
             Assert.Equal(0, version.Minor);
             Assert.Equal(0, version.Patch);
@@ -58,9 +58,9 @@ namespace AWZhome.GutenTag.Tests
         public void SimpleDevTag_CustomPrefixes()
         {
             VersioningConfig config = new() { ReleaseTagPrefix = "z", DevTagPrefix = "d-" };
-            var version = GitTagParser.Parse("d-2.0", config);
+            var version = TagParser.Parse("d-2.0", config);
 
-            Assert.Equal("d-2.0", version.BasedOnGitTag);
+            Assert.Equal("d-2.0", version.BasedOnTag);
             Assert.Equal(2, version.Major);
             Assert.Equal(0, version.Minor);
             Assert.Equal(0, version.Patch);
@@ -74,9 +74,9 @@ namespace AWZhome.GutenTag.Tests
         public void MajorOnly()
         {
             VersioningConfig config = new();
-            var version = GitTagParser.Parse("v2", config);
+            var version = TagParser.Parse("v2", config);
 
-            Assert.Equal("v2", version.BasedOnGitTag);
+            Assert.Equal("v2", version.BasedOnTag);
             Assert.Equal(2, version.Major);
             Assert.Equal(0, version.Minor);
             Assert.Equal(0, version.Patch);
@@ -90,9 +90,9 @@ namespace AWZhome.GutenTag.Tests
         public void MajorOnly_DevMark()
         {
             VersioningConfig config = new();
-            var version = GitTagParser.Parse("dev-2", config);
+            var version = TagParser.Parse("dev-2", config);
 
-            Assert.Equal("dev-2", version.BasedOnGitTag);
+            Assert.Equal("dev-2", version.BasedOnTag);
             Assert.Equal(2, version.Major);
             Assert.Equal(0, version.Minor);
             Assert.Equal(0, version.Patch);
@@ -106,9 +106,9 @@ namespace AWZhome.GutenTag.Tests
         public void MajorManorZeroPatch()
         {
             VersioningConfig config = new();
-            var version = GitTagParser.Parse("v2.0.0", config);
+            var version = TagParser.Parse("v2.0.0", config);
 
-            Assert.Equal("v2.0.0", version.BasedOnGitTag);
+            Assert.Equal("v2.0.0", version.BasedOnTag);
             Assert.Equal(2, version.Major);
             Assert.Equal(0, version.Minor);
             Assert.Equal(0, version.Patch);
@@ -122,9 +122,9 @@ namespace AWZhome.GutenTag.Tests
         public void MajorManorNonZeroPatch()
         {
             VersioningConfig config = new();
-            var version = GitTagParser.Parse("v2.0.1", config);
+            var version = TagParser.Parse("v2.0.1", config);
 
-            Assert.Equal("v2.0.1", version.BasedOnGitTag);
+            Assert.Equal("v2.0.1", version.BasedOnTag);
             Assert.Equal(2, version.Major);
             Assert.Equal(0, version.Minor);
             Assert.Equal(1, version.Patch);
@@ -135,12 +135,12 @@ namespace AWZhome.GutenTag.Tests
         }
 
         [Fact]
-        public void BranchTag_NoPatch()
+        public void PreReleaseTag_NoMinor()
         {
             VersioningConfig config = new();
-            var version = GitTagParser.Parse("v2.0-main", config);
+            var version = TagParser.Parse("v2-main", config);
 
-            Assert.Equal("v2.0-main", version.BasedOnGitTag);
+            Assert.Equal("v2-main", version.BasedOnTag);
             Assert.Equal(2, version.Major);
             Assert.Equal(0, version.Minor);
             Assert.Equal(0, version.Patch);
@@ -151,99 +151,99 @@ namespace AWZhome.GutenTag.Tests
         }
 
         [Fact]
-        public void BranchTag_WithPatch()
+        public void PreReleaseTag_NoPatch()
         {
             VersioningConfig config = new();
-            var version = GitTagParser.Parse("v2.0.1-main", config);
+            var version = TagParser.Parse("v2.0-main", config);
 
-            Assert.Equal("v2.0.1-main", version.BasedOnGitTag);
-            Assert.Equal(2, version.Major);
-            Assert.Equal(0, version.Minor);
-            Assert.Equal(1, version.Patch);
-            Assert.Equal(0, version.BuildNumber);
-            Assert.Equal(0, version.Revision);
-            Assert.Equal("main", version.PreReleaseTag);
-            Assert.False(version.IsBasedOnDevMark);
-        }
-
-        [Fact]
-        public void BranchTag_WithPatch_DevMark()
-        {
-            VersioningConfig config = new();
-            var version = GitTagParser.Parse("dev-2.0.1-main", config);
-
-            Assert.Equal("dev-2.0.1-main", version.BasedOnGitTag);
-            Assert.Equal(2, version.Major);
-            Assert.Equal(0, version.Minor);
-            Assert.Equal(1, version.Patch);
-            Assert.Equal(0, version.BuildNumber);
-            Assert.Equal(0, version.Revision);
-            Assert.Equal("main", version.PreReleaseTag);
-            Assert.True(version.IsBasedOnDevMark);
-        }
-
-        [Fact]
-        public void Revision_Simple()
-        {
-            VersioningConfig config = new();
-            var version = GitTagParser.Parse("v2.0-5-abcdefg", config);
-
-            Assert.Equal("v2.0", version.BasedOnGitTag);
+            Assert.Equal("v2.0-main", version.BasedOnTag);
             Assert.Equal(2, version.Major);
             Assert.Equal(0, version.Minor);
             Assert.Equal(0, version.Patch);
-            Assert.Equal(5, version.BuildNumber);
-            Assert.Equal(5, version.Revision);
-            Assert.Null(version.PreReleaseTag);
-            Assert.False(version.IsBasedOnDevMark);
-        }
-
-        [Fact]
-        public void Revision_WithPatch()
-        {
-            VersioningConfig config = new();
-            var version = GitTagParser.Parse("v2.0.1-5-abcdefg", config);
-
-            Assert.Equal("v2.0.1", version.BasedOnGitTag);
-            Assert.Equal(2, version.Major);
-            Assert.Equal(0, version.Minor);
-            Assert.Equal(1, version.Patch);
-            Assert.Equal(5, version.BuildNumber);
-            Assert.Equal(5, version.Revision);
-            Assert.Null(version.PreReleaseTag);
-            Assert.False(version.IsBasedOnDevMark);
-        }
-
-        [Fact]
-        public void Revision_WithBranchTag()
-        {
-            VersioningConfig config = new();
-            var version = GitTagParser.Parse("v2.0.1-main-5-abcdefg", config);
-
-            Assert.Equal("v2.0.1-main", version.BasedOnGitTag);
-            Assert.Equal(2, version.Major);
-            Assert.Equal(0, version.Minor);
-            Assert.Equal(1, version.Patch);
-            Assert.Equal(5, version.BuildNumber);
-            Assert.Equal(5, version.Revision);
+            Assert.Equal(0, version.BuildNumber);
+            Assert.Equal(0, version.Revision);
             Assert.Equal("main", version.PreReleaseTag);
             Assert.False(version.IsBasedOnDevMark);
         }
 
         [Fact]
-        public void Revision_WithBranchTag_DevMark()
+        public void PreReleaseTag_WithPatch()
         {
             VersioningConfig config = new();
-            var version = GitTagParser.Parse("dev-2.0.1-main-5-abcdefg", config);
+            var version = TagParser.Parse("v2.0.1-main", config);
 
-            Assert.Equal("dev-2.0.1-main", version.BasedOnGitTag);
+            Assert.Equal("v2.0.1-main", version.BasedOnTag);
             Assert.Equal(2, version.Major);
             Assert.Equal(0, version.Minor);
             Assert.Equal(1, version.Patch);
-            Assert.Equal(5, version.BuildNumber);
-            Assert.Equal(5, version.Revision);
+            Assert.Equal(0, version.BuildNumber);
+            Assert.Equal(0, version.Revision);
+            Assert.Equal("main", version.PreReleaseTag);
+            Assert.False(version.IsBasedOnDevMark);
+        }
+
+        [Fact]
+        public void PreReleaseTag_WithPatch_DevMark()
+        {
+            VersioningConfig config = new();
+            var version = TagParser.Parse("dev-2.0.1-main", config);
+
+            Assert.Equal("dev-2.0.1-main", version.BasedOnTag);
+            Assert.Equal(2, version.Major);
+            Assert.Equal(0, version.Minor);
+            Assert.Equal(1, version.Patch);
+            Assert.Equal(0, version.BuildNumber);
+            Assert.Equal(0, version.Revision);
             Assert.Equal("main", version.PreReleaseTag);
             Assert.True(version.IsBasedOnDevMark);
+        }
+
+        [Fact]
+        public void PreReleaseTag_Numeric()
+        {
+            VersioningConfig config = new();
+            var version = TagParser.Parse("v2.0-5", config);
+
+            Assert.Equal("v2.0-5", version.BasedOnTag);
+            Assert.Equal(2, version.Major);
+            Assert.Equal(0, version.Minor);
+            Assert.Equal(0, version.Patch);
+            Assert.Equal(0, version.BuildNumber);
+            Assert.Equal(0, version.Revision);
+            Assert.Equal("5", version.PreReleaseTag);
+            Assert.False(version.IsBasedOnDevMark);
+        }
+
+        [Fact]
+        public void PreReleaseTag_Complex()
+        {
+            VersioningConfig config = new();
+            var version = TagParser.Parse("v2.0.1-rc.3", config);
+
+            Assert.Equal("v2.0.1-rc.3", version.BasedOnTag);
+            Assert.Equal(2, version.Major);
+            Assert.Equal(0, version.Minor);
+            Assert.Equal(1, version.Patch);
+            Assert.Equal(0, version.BuildNumber);
+            Assert.Equal(0, version.Revision);
+            Assert.Equal("rc.3", version.PreReleaseTag);
+            Assert.False(version.IsBasedOnDevMark);
+        }
+
+        [Fact]
+        public void PreReleaseTag_DotSeparated()
+        {
+            VersioningConfig config = new();
+            var version = TagParser.Parse("v2.0.1.rc3", config);
+
+            Assert.Equal("v2.0.1.rc3", version.BasedOnTag);
+            Assert.Equal(2, version.Major);
+            Assert.Equal(0, version.Minor);
+            Assert.Equal(1, version.Patch);
+            Assert.Equal(0, version.BuildNumber);
+            Assert.Equal(0, version.Revision);
+            Assert.Equal("rc3", version.PreReleaseTag);
+            Assert.False(version.IsBasedOnDevMark);
         }
     }
 }

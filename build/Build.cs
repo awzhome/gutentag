@@ -32,12 +32,12 @@ class Build : NukeBuild
         _ => new()
     };
 
-    Versioning Versioning => new(new VersioningConfig(), BranchVersioningConfig, NukeGitAdapter.Executor);
+    Versioning Versioning => new(BranchVersioningConfig, new NukeGitAdapter(new VersioningConfig()));
 
     Target ShowVersion => _ => _
         .Executes(() =>
         {
-            var version = Versioning.GetProjectVersion();
+            var version = Versioning.GetVersionInfo();
             Console.WriteLine($"Project version is {version.AsString()} (Assembly version: {version.AsNumericVersion()})");
         });
 
@@ -45,8 +45,8 @@ class Build : NukeBuild
         .DependsOn(ShowVersion)
         .Executes(() =>
         {
-            var version = Versioning.GetProjectVersion();
-            var writer = new ProjectVersionWriter(version);
+            var version = Versioning.GetVersionInfo();
+            var writer = new VersionInfoWriter(version);
             writer.WriteToVsProject(
                 WorkingDirectory / "AWZhome.GutenTag" / "AWZhome.GutenTag.csproj",
                 WorkingDirectory / "AWZhome.GutenTag.Tests" / "AWZhome.GutenTag.Tests.csproj");

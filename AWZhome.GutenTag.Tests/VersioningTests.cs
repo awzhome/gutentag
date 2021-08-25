@@ -9,17 +9,16 @@ namespace AWZhome.GutenTag.Tests
         {
             VersioningConfig versioningConfig = new();
             static BranchVersioning branchConfig(string _) => new() { IncrementedPart = IncrementedPart.Patch };
-            MockedGitExecutor git = new(versioningConfig)
+            var git = new TestVcsAdapter(versioningConfig)
             {
                 CurrentBranch = "main",
-                HasCleanWorkingCopy = true,
-                ResultOnSimpleDescribe = "v2.0",
-                ResultOnDescribeOnlyPatchMatches = "v2.0"
+                IsCleanWorkingCopy = true,
+                ChronologicAncestorTags = new[] { ("v2.0", 0), ("v1.0", 10) },
             };
-            Versioning versioning = new(versioningConfig, branchConfig, git);
-            var version = versioning.GetProjectVersion();
+            Versioning versioning = new(branchConfig, git);
+            var version = versioning.GetVersionInfo();
 
-            Assert.Equal("v2.0", version.BasedOnGitTag);
+            Assert.Equal("v2.0", version.BasedOnTag);
             Assert.Equal(2, version.Major);
             Assert.Equal(0, version.Minor);
             Assert.Equal(0, version.Patch);
@@ -35,17 +34,16 @@ namespace AWZhome.GutenTag.Tests
         {
             VersioningConfig versioningConfig = new() { ReleaseTagPrefix = "ver-" };
             static BranchVersioning branchConfig(string _) => new() { IncrementedPart = IncrementedPart.Patch };
-            MockedGitExecutor git = new(versioningConfig)
+            var git = new TestVcsAdapter(versioningConfig)
             {
                 CurrentBranch = "main",
-                HasCleanWorkingCopy = true,
-                ResultOnSimpleDescribe = "ver-2.0",
-                ResultOnDescribeOnlyPatchMatches = "ver-2.0"
+                IsCleanWorkingCopy = true,
+                ChronologicAncestorTags = new[] { ("ver-2.0", 0), ("ver-1.0", 10) },
             };
-            Versioning versioning = new(versioningConfig, branchConfig, git);
-            var version = versioning.GetProjectVersion();
+            Versioning versioning = new(branchConfig, git);
+            var version = versioning.GetVersionInfo();
 
-            Assert.Equal("ver-2.0", version.BasedOnGitTag);
+            Assert.Equal("ver-2.0", version.BasedOnTag);
             Assert.Equal(2, version.Major);
             Assert.Equal(0, version.Minor);
             Assert.Equal(0, version.Patch);
@@ -61,17 +59,16 @@ namespace AWZhome.GutenTag.Tests
         {
             VersioningConfig versioningConfig = new();
             static BranchVersioning branchConfig(string _) => new() { IncrementedPart = IncrementedPart.Patch };
-            MockedGitExecutor git = new(versioningConfig)
+            var git = new TestVcsAdapter(versioningConfig)
             {
                 CurrentBranch = "main",
-                HasCleanWorkingCopy = true,
-                ResultOnSimpleDescribe = "v2.0.1",
-                ResultOnDescribeOnlyPatchMatches = "v2.0.1"
+                IsCleanWorkingCopy = true,
+                ChronologicAncestorTags = new[] { ("v2.0.1", 0), ("v2.0", 10) },
             };
-            Versioning versioning = new(versioningConfig, branchConfig, git);
-            var version = versioning.GetProjectVersion();
+            Versioning versioning = new(branchConfig, git);
+            var version = versioning.GetVersionInfo();
 
-            Assert.Equal("v2.0.1", version.BasedOnGitTag);
+            Assert.Equal("v2.0.1", version.BasedOnTag);
             Assert.Equal(2, version.Major);
             Assert.Equal(0, version.Minor);
             Assert.Equal(1, version.Patch);
@@ -87,17 +84,16 @@ namespace AWZhome.GutenTag.Tests
         {
             VersioningConfig versioningConfig = new();
             static BranchVersioning branchConfig(string _) => new() { IncrementedPart = IncrementedPart.Minor };
-            MockedGitExecutor git = new(versioningConfig)
+            var git = new TestVcsAdapter(versioningConfig)
             {
                 CurrentBranch = "main",
-                HasCleanWorkingCopy = false,
-                ResultOnSimpleDescribe = "v2.0",
-                ResultOnDescribeOnlyMinorMatches = "v2.0"
+                IsCleanWorkingCopy = false,
+                ChronologicAncestorTags = new[] { ("v2.0", 0), ("v1.0", 10) },
             };
-            Versioning versioning = new(versioningConfig, branchConfig, git);
-            var version = versioning.GetProjectVersion();
+            Versioning versioning = new(branchConfig, git);
+            var version = versioning.GetVersionInfo();
 
-            Assert.Equal("v2.0", version.BasedOnGitTag);
+            Assert.Equal("v2.0", version.BasedOnTag);
             Assert.Equal(2, version.Major);
             Assert.Equal(1, version.Minor);
             Assert.Equal(0, version.Patch);
@@ -113,17 +109,16 @@ namespace AWZhome.GutenTag.Tests
         {
             VersioningConfig versioningConfig = new();
             static BranchVersioning branchConfig(string _) => new() { IncrementedPart = IncrementedPart.Patch };
-            MockedGitExecutor git = new(versioningConfig)
+            var git = new TestVcsAdapter(versioningConfig)
             {
                 CurrentBranch = "main",
-                HasCleanWorkingCopy = false,
-                ResultOnSimpleDescribe = "v2.0",
-                ResultOnDescribeOnlyPatchMatches = "v2.0"
+                IsCleanWorkingCopy = false,
+                ChronologicAncestorTags = new[] { ("v2.0", 0), ("v1.0", 10) },
             };
-            Versioning versioning = new(versioningConfig, branchConfig, git);
-            var version = versioning.GetProjectVersion();
+            Versioning versioning = new(branchConfig, git);
+            var version = versioning.GetVersionInfo();
 
-            Assert.Equal("v2.0", version.BasedOnGitTag);
+            Assert.Equal("v2.0", version.BasedOnTag);
             Assert.Equal(2, version.Major);
             Assert.Equal(0, version.Minor);
             Assert.Equal(1, version.Patch);
@@ -139,17 +134,16 @@ namespace AWZhome.GutenTag.Tests
         {
             VersioningConfig versioningConfig = new();
             static BranchVersioning branchConfig(string _) => new() { IncrementedPart = IncrementedPart.Minor };
-            MockedGitExecutor git = new(versioningConfig)
+            var git = new TestVcsAdapter(versioningConfig)
             {
                 CurrentBranch = "main",
-                HasCleanWorkingCopy = true,
-                ResultOnSimpleDescribe = "v2.0-1-abcdef",
-                ResultOnDescribeOnlyMinorMatches = "v2.0-1-abcdef"
+                IsCleanWorkingCopy = true,
+                ChronologicAncestorTags = new[] { ("v2.0", 1), ("v1.0", 10) },
             };
-            Versioning versioning = new(versioningConfig, branchConfig, git);
-            var version = versioning.GetProjectVersion();
+            Versioning versioning = new(branchConfig, git);
+            var version = versioning.GetVersionInfo();
 
-            Assert.Equal("v2.0", version.BasedOnGitTag);
+            Assert.Equal("v2.0", version.BasedOnTag);
             Assert.Equal(2, version.Major);
             Assert.Equal(1, version.Minor);
             Assert.Equal(0, version.Patch);
@@ -165,17 +159,16 @@ namespace AWZhome.GutenTag.Tests
         {
             VersioningConfig versioningConfig = new();
             static BranchVersioning branchConfig(string _) => new() { IncrementedPart = IncrementedPart.Minor };
-            MockedGitExecutor git = new(versioningConfig)
+            var git = new TestVcsAdapter(versioningConfig)
             {
                 CurrentBranch = "main",
-                HasCleanWorkingCopy = false,
-                ResultOnSimpleDescribe = "v2.0-1-abcdef",
-                ResultOnDescribeOnlyMinorMatches = "v2.0-1-abcdef"
+                IsCleanWorkingCopy = false,
+                ChronologicAncestorTags = new[] { ("v2.0", 1), ("v1.0", 10) },
             };
-            Versioning versioning = new(versioningConfig, branchConfig, git);
-            var version = versioning.GetProjectVersion();
+            Versioning versioning = new(branchConfig, git);
+            var version = versioning.GetVersionInfo();
 
-            Assert.Equal("v2.0", version.BasedOnGitTag);
+            Assert.Equal("v2.0", version.BasedOnTag);
             Assert.Equal(2, version.Major);
             Assert.Equal(1, version.Minor);
             Assert.Equal(0, version.Patch);
@@ -191,17 +184,16 @@ namespace AWZhome.GutenTag.Tests
         {
             VersioningConfig versioningConfig = new();
             static BranchVersioning branchConfig(string _) => new() { IncrementedPart = IncrementedPart.Patch };
-            MockedGitExecutor git = new(versioningConfig)
+            var git = new TestVcsAdapter(versioningConfig)
             {
                 CurrentBranch = "main",
-                HasCleanWorkingCopy = true,
-                ResultOnSimpleDescribe = "v2.0-1-abcdef",
-                ResultOnDescribeOnlyPatchMatches = "v2.0-1-abcdef"
+                IsCleanWorkingCopy = true,
+                ChronologicAncestorTags = new[] { ("v2.0", 1), ("v1.0", 10) },
             };
-            Versioning versioning = new(versioningConfig, branchConfig, git);
-            var version = versioning.GetProjectVersion();
+            Versioning versioning = new(branchConfig, git);
+            var version = versioning.GetVersionInfo();
 
-            Assert.Equal("v2.0", version.BasedOnGitTag);
+            Assert.Equal("v2.0", version.BasedOnTag);
             Assert.Equal(2, version.Major);
             Assert.Equal(0, version.Minor);
             Assert.Equal(1, version.Patch);
@@ -217,17 +209,16 @@ namespace AWZhome.GutenTag.Tests
         {
             VersioningConfig versioningConfig = new();
             static BranchVersioning branchConfig(string _) => new() { IncrementedPart = IncrementedPart.Patch };
-            MockedGitExecutor git = new(versioningConfig)
+            var git = new TestVcsAdapter(versioningConfig)
             {
                 CurrentBranch = "main",
-                HasCleanWorkingCopy = true,
-                ResultOnSimpleDescribe = "dev-2.0",
-                ResultOnDescribeOnlyPatchMatches = "dev-2.0"
+                IsCleanWorkingCopy = true,
+                ChronologicAncestorTags = new[] { ("dev-2.0", 0), ("v1.0", 10) },
             };
-            Versioning versioning = new(versioningConfig, branchConfig, git);
-            var version = versioning.GetProjectVersion();
+            Versioning versioning = new(branchConfig, git);
+            var version = versioning.GetVersionInfo();
 
-            Assert.Equal("dev-2.0", version.BasedOnGitTag);
+            Assert.Equal("dev-2.0", version.BasedOnTag);
             Assert.Equal(2, version.Major);
             Assert.Equal(0, version.Minor);
             Assert.Equal(0, version.Patch);
@@ -243,17 +234,17 @@ namespace AWZhome.GutenTag.Tests
         {
             VersioningConfig versioningConfig = new();
             static BranchVersioning branchConfig(string _) => new() { IncrementedPart = IncrementedPart.Patch };
-            MockedGitExecutor git = new(versioningConfig)
+            var git = new TestVcsAdapter(versioningConfig)
             {
                 CurrentBranch = "main",
-                HasCleanWorkingCopy = true,
-                ResultOnSimpleDescribe = "dev-2.0-1-abcdef",
-                ResultOnDescribeOnlyPatchMatches = "dev-2.0-1-abcdef"
-            };
-            Versioning versioning = new(versioningConfig, branchConfig, git);
-            var version = versioning.GetProjectVersion();
+                IsCleanWorkingCopy = true,
+                ChronologicAncestorTags = new[] { ("dev-2.0", 1), ("v1.0", 10) },
 
-            Assert.Equal("dev-2.0", version.BasedOnGitTag);
+            };
+            Versioning versioning = new(branchConfig, git);
+            var version = versioning.GetVersionInfo();
+
+            Assert.Equal("dev-2.0", version.BasedOnTag);
             Assert.Equal(2, version.Major);
             Assert.Equal(0, version.Minor);
             Assert.Equal(0, version.Patch);
@@ -269,18 +260,16 @@ namespace AWZhome.GutenTag.Tests
         {
             VersioningConfig versioningConfig = new();
             static BranchVersioning branchConfig(string _) => new() { IncrementedPart = IncrementedPart.Patch };
-            MockedGitExecutor git = new(versioningConfig)
+            var git = new TestVcsAdapter(versioningConfig)
             {
                 CurrentBranch = "main",
-                HasCleanWorkingCopy = true,
-                ResultOnSimpleDescribe = "v2.0",
-                ResultOnDescribeOnlyPatchMatches = "v2.0",
-                ResultOnDescribeOnlyPatchMatchesWithExclude = (Excluding: "v2.0", Result: "dev-2.0-5-abcdef")
+                IsCleanWorkingCopy = true,
+                ChronologicAncestorTags = new[] { ("v2.0", 0), ("dev-2.0", 5), ("v1.0", 10) },
             };
-            Versioning versioning = new(versioningConfig, branchConfig, git);
-            var version = versioning.GetProjectVersion();
+            Versioning versioning = new(branchConfig, git);
+            var version = versioning.GetVersionInfo();
 
-            Assert.Equal("v2.0", version.BasedOnGitTag);
+            Assert.Equal("v2.0", version.BasedOnTag);
             Assert.Equal(2, version.Major);
             Assert.Equal(0, version.Minor);
             Assert.Equal(0, version.Patch);
@@ -296,18 +285,16 @@ namespace AWZhome.GutenTag.Tests
         {
             VersioningConfig versioningConfig = new() { ReleaseTagPrefix = "ver-", DevTagPrefix = "start-" };
             static BranchVersioning branchConfig(string _) => new() { IncrementedPart = IncrementedPart.Patch };
-            MockedGitExecutor git = new(versioningConfig)
+            var git = new TestVcsAdapter(versioningConfig)
             {
                 CurrentBranch = "main",
-                HasCleanWorkingCopy = true,
-                ResultOnSimpleDescribe = "ver-2.0",
-                ResultOnDescribeOnlyPatchMatches = "ver-2.0",
-                ResultOnDescribeOnlyPatchMatchesWithExclude = (Excluding: "ver-2.0", Result: "start-2.0-5-abcdef")
+                IsCleanWorkingCopy = true,
+                ChronologicAncestorTags = new[] { ("ver-2.0", 0), ("start-2.0", 5), ("ver-1.0", 10) },
             };
-            Versioning versioning = new(versioningConfig, branchConfig, git);
-            var version = versioning.GetProjectVersion();
+            Versioning versioning = new(branchConfig, git);
+            var version = versioning.GetVersionInfo();
 
-            Assert.Equal("ver-2.0", version.BasedOnGitTag);
+            Assert.Equal("ver-2.0", version.BasedOnTag);
             Assert.Equal(2, version.Major);
             Assert.Equal(0, version.Minor);
             Assert.Equal(0, version.Patch);
@@ -323,17 +310,16 @@ namespace AWZhome.GutenTag.Tests
         {
             VersioningConfig versioningConfig = new();
             static BranchVersioning branchConfig(string _) => new() { IncrementedPart = IncrementedPart.Minor };
-            MockedGitExecutor git = new(versioningConfig)
+            var git = new TestVcsAdapter(versioningConfig)
             {
                 CurrentBranch = "main",
-                HasCleanWorkingCopy = true,
-                ResultOnSimpleDescribe = "v2.0.1",
-                ResultOnDescribeOnlyMinorMatches = "v2.0-5-abcdef"
+                IsCleanWorkingCopy = true,
+                ChronologicAncestorTags = new[] { ("v2.0.1", 0), ("v2.0", 5), ("dev-2.0", 7), ("v1.0", 10) },
             };
-            Versioning versioning = new(versioningConfig, branchConfig, git);
-            var version = versioning.GetProjectVersion();
+            Versioning versioning = new(branchConfig, git);
+            var version = versioning.GetVersionInfo();
 
-            Assert.Equal("v2.0.1", version.BasedOnGitTag);
+            Assert.Equal("v2.0.1", version.BasedOnTag);
             Assert.Equal(2, version.Major);
             Assert.Equal(0, version.Minor);
             Assert.Equal(1, version.Patch);
@@ -349,17 +335,16 @@ namespace AWZhome.GutenTag.Tests
         {
             VersioningConfig versioningConfig = new();
             static BranchVersioning branchConfig(string _) => new() { IncrementedPart = IncrementedPart.Patch };
-            MockedGitExecutor git = new(versioningConfig)
+            var git = new TestVcsAdapter(versioningConfig)
             {
                 CurrentBranch = "main",
-                HasCleanWorkingCopy = true,
-                ResultOnSimpleDescribe = "v2.0.1-2-abcdef",
-                ResultOnDescribeOnlyPatchMatches = "v2.0.1-2-abcdef"
+                IsCleanWorkingCopy = true,
+                ChronologicAncestorTags = new[] { ("v2.0.1", 2), ("v2.0", 5), ("dev-2.0", 7), ("v1.0", 10) },
             };
-            Versioning versioning = new(versioningConfig, branchConfig, git);
-            var version = versioning.GetProjectVersion();
+            Versioning versioning = new(branchConfig, git);
+            var version = versioning.GetVersionInfo();
 
-            Assert.Equal("v2.0.1", version.BasedOnGitTag);
+            Assert.Equal("v2.0.1", version.BasedOnTag);
             Assert.Equal(2, version.Major);
             Assert.Equal(0, version.Minor);
             Assert.Equal(2, version.Patch);
@@ -375,17 +360,16 @@ namespace AWZhome.GutenTag.Tests
         {
             VersioningConfig versioningConfig = new();
             static BranchVersioning branchConfig(string _) => new() { IncrementedPart = IncrementedPart.Minor };
-            MockedGitExecutor git = new(versioningConfig)
+            var git = new TestVcsAdapter(versioningConfig)
             {
                 CurrentBranch = "main",
-                HasCleanWorkingCopy = true,
-                ResultOnSimpleDescribe = "v2.0.1-2-abcdef",
-                ResultOnDescribeOnlyMinorMatches = "v2.0-5-abcdef"
+                IsCleanWorkingCopy = true,
+                ChronologicAncestorTags = new[] { ("v2.0.1", 2), ("v2.0", 5), ("dev-2.0", 7), ("v1.0", 10) },
             };
-            Versioning versioning = new(versioningConfig, branchConfig, git);
-            var version = versioning.GetProjectVersion();
+            Versioning versioning = new(branchConfig, git);
+            var version = versioning.GetVersionInfo();
 
-            Assert.Equal("v2.0", version.BasedOnGitTag);
+            Assert.Equal("v2.0", version.BasedOnTag);
             Assert.Equal(2, version.Major);
             Assert.Equal(1, version.Minor);
             Assert.Equal(0, version.Patch);
@@ -401,18 +385,16 @@ namespace AWZhome.GutenTag.Tests
         {
             VersioningConfig versioningConfig = new();
             static BranchVersioning branchConfig(string _) => new() { IncrementedPart = IncrementedPart.Patch };
-            MockedGitExecutor git = new(versioningConfig)
+            var git = new TestVcsAdapter(versioningConfig)
             {
                 CurrentBranch = "main",
-                HasCleanWorkingCopy = true,
-                ResultOnSimpleDescribe = "v2.0-beta",
-                ResultOnDescribeOnlyPatchMatches = "dev-2.0-5-abcdef",
-                ResultOnDescribeOnlyPatchMatchesWithExclude = (Excluding: "v2.0-beta", Result: "dev-2.0-5-abcdef")
+                IsCleanWorkingCopy = true,
+                ChronologicAncestorTags = new[] { ("v2.0-beta", 0), ("dev-2.0", 5), ("v1.0", 10) },
             };
-            Versioning versioning = new(versioningConfig, branchConfig, git);
-            var version = versioning.GetProjectVersion();
+            Versioning versioning = new(branchConfig, git);
+            var version = versioning.GetVersionInfo();
 
-            Assert.Equal("v2.0-beta", version.BasedOnGitTag);
+            Assert.Equal("v2.0-beta", version.BasedOnTag);
             Assert.Equal(2, version.Major);
             Assert.Equal(0, version.Minor);
             Assert.Equal(0, version.Patch);
@@ -428,18 +410,16 @@ namespace AWZhome.GutenTag.Tests
         {
             VersioningConfig versioningConfig = new();
             static BranchVersioning branchConfig(string _) => new() { IncrementedPart = IncrementedPart.Patch };
-            MockedGitExecutor git = new(versioningConfig)
+            var git = new TestVcsAdapter(versioningConfig)
             {
                 CurrentBranch = "rc",
-                HasCleanWorkingCopy = true,
-                ResultOnSimpleDescribe = "v2.0-rc",
-                ResultOnDescribeOnlyPatchMatches = "dev-2.0-5-abcdef",
-                ResultOnDescribeOnlyPatchMatchesWithExclude = (Excluding: "v2.0-rc", Result: "dev-2.0-5-abcdef")
+                IsCleanWorkingCopy = true,
+                ChronologicAncestorTags = new[] { ("v2.0-rc", 0), ("dev-2.0", 5), ("v1.0", 10) },
             };
-            Versioning versioning = new(versioningConfig, branchConfig, git);
-            var version = versioning.GetProjectVersion();
+            Versioning versioning = new(branchConfig, git);
+            var version = versioning.GetVersionInfo();
 
-            Assert.Equal("v2.0-rc", version.BasedOnGitTag);
+            Assert.Equal("v2.0-rc", version.BasedOnTag);
             Assert.Equal(2, version.Major);
             Assert.Equal(0, version.Minor);
             Assert.Equal(0, version.Patch);
@@ -455,18 +435,16 @@ namespace AWZhome.GutenTag.Tests
         {
             VersioningConfig versioningConfig = new();
             static BranchVersioning branchConfig(string _) => new() { IncrementedPart = IncrementedPart.Patch };
-            MockedGitExecutor git = new(versioningConfig)
+            var git = new TestVcsAdapter(versioningConfig)
             {
                 CurrentBranch = "main",
-                HasCleanWorkingCopy = true,
-                ResultOnSimpleDescribe = "v2.0-beta-1-abcdef",
-                ResultOnDescribeOnlyPatchMatches = "dev-2.0-5-abcdef",
-                ResultOnDescribeOnlyPatchMatchesWithExclude = (Excluding: "v2.0-beta", Result: "dev-2.0-5-abcdef")
+                IsCleanWorkingCopy = true,
+                ChronologicAncestorTags = new[] { ("v2.0-beta", 1), ("dev-2.0", 5), ("v1.0", 10) },
             };
-            Versioning versioning = new(versioningConfig, branchConfig, git);
-            var version = versioning.GetProjectVersion();
+            Versioning versioning = new(branchConfig, git);
+            var version = versioning.GetVersionInfo();
 
-            Assert.Equal("dev-2.0", version.BasedOnGitTag);
+            Assert.Equal("dev-2.0", version.BasedOnTag);
             Assert.Equal(2, version.Major);
             Assert.Equal(0, version.Minor);
             Assert.Equal(0, version.Patch);
@@ -482,18 +460,16 @@ namespace AWZhome.GutenTag.Tests
         {
             VersioningConfig versioningConfig = new();
             static BranchVersioning branchConfig(string _) => new() { IncrementedPart = IncrementedPart.Patch };
-            MockedGitExecutor git = new(versioningConfig)
+            var git = new TestVcsAdapter(versioningConfig)
             {
                 CurrentBranch = "rc",
-                HasCleanWorkingCopy = true,
-                ResultOnSimpleDescribe = "v2.0-rc-1-abcdef",
-                ResultOnDescribeOnlyPatchMatches = "dev-2.0-5-abcdef",
-                ResultOnDescribeOnlyPatchMatchesWithExclude = (Excluding: "v2.0-rc", Result: "dev-2.0-5-abcdef")
+                IsCleanWorkingCopy = true,
+                ChronologicAncestorTags = new[] { ("v2.0-rc", 1), ("dev-2.0", 5), ("v1.0", 10) },
             };
-            Versioning versioning = new(versioningConfig, branchConfig, git);
-            var version = versioning.GetProjectVersion();
+            Versioning versioning = new(branchConfig, git);
+            var version = versioning.GetVersionInfo();
 
-            Assert.Equal("dev-2.0", version.BasedOnGitTag);
+            Assert.Equal("dev-2.0", version.BasedOnTag);
             Assert.Equal(2, version.Major);
             Assert.Equal(0, version.Minor);
             Assert.Equal(0, version.Patch);
@@ -509,18 +485,16 @@ namespace AWZhome.GutenTag.Tests
         {
             VersioningConfig versioningConfig = new();
             static BranchVersioning branchConfig(string _) => new() { IncrementedPart = IncrementedPart.Patch };
-            MockedGitExecutor git = new(versioningConfig)
+            var git = new TestVcsAdapter(versioningConfig)
             {
                 CurrentBranch = "main",
-                HasCleanWorkingCopy = true,
-                ResultOnSimpleDescribe = "v2.0.1-beta-1-abcdef",
-                ResultOnDescribeOnlyPatchMatches = "dev-2.0-5-abcdef",
-                ResultOnDescribeOnlyPatchMatchesWithExclude = (Excluding: "v2.0.1-beta", Result: "dev-2.0-5-abcdef")
+                IsCleanWorkingCopy = true,
+                ChronologicAncestorTags = new[] { ("v2.0-beta", 1), ("dev-2.0", 5), ("v1.0", 10) },
             };
-            Versioning versioning = new(versioningConfig, branchConfig, git);
-            var version = versioning.GetProjectVersion();
+            Versioning versioning = new(branchConfig, git);
+            var version = versioning.GetVersionInfo();
 
-            Assert.Equal("dev-2.0", version.BasedOnGitTag);
+            Assert.Equal("dev-2.0", version.BasedOnTag);
             Assert.Equal(2, version.Major);
             Assert.Equal(0, version.Minor);
             Assert.Equal(0, version.Patch);
@@ -536,17 +510,16 @@ namespace AWZhome.GutenTag.Tests
         {
             VersioningConfig versioningConfig = new();
             static BranchVersioning branchConfig(string _) => new() { IncrementedPart = IncrementedPart.Minor };
-            MockedGitExecutor git = new(versioningConfig)
+            var git = new TestVcsAdapter(versioningConfig)
             {
                 CurrentBranch = "feature/any",
-                HasCleanWorkingCopy = true,
-                ResultOnSimpleDescribe = "v2.0-1-abcdef",
-                ResultOnDescribeOnlyMinorMatches = "v2.0-1-abcdef"
+                IsCleanWorkingCopy = true,
+                ChronologicAncestorTags = new[] { ("v2.0", 1), ("v1.0", 10) },
             };
-            Versioning versioning = new(versioningConfig, branchConfig, git);
-            var version = versioning.GetProjectVersion();
+            Versioning versioning = new(branchConfig, git);
+            var version = versioning.GetVersionInfo();
 
-            Assert.Equal("v2.0", version.BasedOnGitTag);
+            Assert.Equal("v2.0", version.BasedOnTag);
             Assert.Equal(2, version.Major);
             Assert.Equal(1, version.Minor);
             Assert.Equal(0, version.Patch);
@@ -562,17 +535,16 @@ namespace AWZhome.GutenTag.Tests
         {
             VersioningConfig versioningConfig = new();
             static BranchVersioning branchConfig(string _) => new() { IncrementedPart = IncrementedPart.Minor };
-            MockedGitExecutor git = new(versioningConfig)
+            var git = new TestVcsAdapter(versioningConfig)
             {
                 CurrentBranch = "feature-any-TASK123",
-                HasCleanWorkingCopy = true,
-                ResultOnSimpleDescribe = "v2.0-1-abcdef",
-                ResultOnDescribeOnlyMinorMatches = "v2.0-1-abcdef"
+                IsCleanWorkingCopy = true,
+                ChronologicAncestorTags = new[] { ("v2.0", 1), ("v1.0", 10) },
             };
-            Versioning versioning = new(versioningConfig, branchConfig, git);
-            var version = versioning.GetProjectVersion();
+            Versioning versioning = new(branchConfig, git);
+            var version = versioning.GetVersionInfo();
 
-            Assert.Equal("v2.0", version.BasedOnGitTag);
+            Assert.Equal("v2.0", version.BasedOnTag);
             Assert.Equal(2, version.Major);
             Assert.Equal(1, version.Minor);
             Assert.Equal(0, version.Patch);
@@ -588,17 +560,16 @@ namespace AWZhome.GutenTag.Tests
         {
             VersioningConfig versioningConfig = new();
             static BranchVersioning branchConfig(string _) => new() { IncrementedPart = IncrementedPart.Minor };
-            MockedGitExecutor git = new(versioningConfig)
+            var git = new TestVcsAdapter(versioningConfig)
             {
                 CurrentBranch = "feätüre-äny-TASK123",
-                HasCleanWorkingCopy = true,
-                ResultOnSimpleDescribe = "v2.0-1-abcdef",
-                ResultOnDescribeOnlyMinorMatches = "v2.0-1-abcdef"
+                IsCleanWorkingCopy = true,
+                ChronologicAncestorTags = new[] { ("v2.0", 1), ("v1.0", 10) },
             };
-            Versioning versioning = new(versioningConfig, branchConfig, git);
-            var version = versioning.GetProjectVersion();
+            Versioning versioning = new(branchConfig, git);
+            var version = versioning.GetVersionInfo();
 
-            Assert.Equal("v2.0", version.BasedOnGitTag);
+            Assert.Equal("v2.0", version.BasedOnTag);
             Assert.Equal(2, version.Major);
             Assert.Equal(1, version.Minor);
             Assert.Equal(0, version.Patch);

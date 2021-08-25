@@ -11,11 +11,13 @@
 
   <ItemGroup>
     <Compile Include="..\AWZhome.GutenTag\FileFinder.cs" Link="GutenTag\FileFinder.cs" />
-    <Compile Include="..\AWZhome.GutenTag\GitTagParser.cs" Link="GutenTag\GitTagParser.cs" />
+    <Compile Include="..\AWZhome.GutenTag\GitAdapter.cs" Link="GutenTag\GitAdapter.cs" />
     <Compile Include="..\AWZhome.GutenTag\PreReleaseNormalizer.cs" Link="GutenTag\PreReleaseNormalizer.cs" />
-    <Compile Include="..\AWZhome.GutenTag\ProjectVersion.cs" Link="GutenTag\ProjectVersion.cs" />
-    <Compile Include="..\AWZhome.GutenTag\ProjectVersionFormatterExtensions.cs" Link="GutenTag\ProjectVersionFormatterExtensions.cs" />
-    <Compile Include="..\AWZhome.GutenTag\ProjectVersionWriter.cs" Link="GutenTag\ProjectVersionWriter.cs" />
+    <Compile Include="..\AWZhome.GutenTag\TagParser.cs" Link="GutenTag\TagParser.cs" />
+    <Compile Include="..\AWZhome.GutenTag\VcsAdapter.cs" Link="GutenTag\VcsAdapter.cs" />
+    <Compile Include="..\AWZhome.GutenTag\VersionInfo.cs" Link="GutenTag\VersionInfo.cs" />
+    <Compile Include="..\AWZhome.GutenTag\VersionInfoFormatterExtensions.cs" Link="GutenTag\VersionInfoFormatterExtensions.cs" />
+    <Compile Include="..\AWZhome.GutenTag\VersionInfoWriter.cs" Link="GutenTag\VersionInfoWriter.cs" />
     <Compile Include="..\AWZhome.GutenTag\Versioning.cs" Link="GutenTag\Versioning.cs" />
   </ItemGroup>
 

@@ -23,112 +23,97 @@ namespace AWZhome.GutenTag
 
     public delegate BranchVersioning BranchSpecificConfig(string branchName);
 
-    public delegate IEnumerable<string> GitExecutor(string commandLine);
-
     public class Versioning
     {
-        private readonly VersioningConfig versioningConfig;
         private readonly BranchSpecificConfig branchConfig;
-        private readonly GitExecutor gitExecutor;
+        private readonly VcsAdapter vcsAdapter;
 
-        public Versioning(VersioningConfig versioningConfig, BranchSpecificConfig branchConfig, GitExecutor gitExecutor)
+        public Versioning(BranchSpecificConfig branchConfig, VcsAdapter vcsAdapter)
         {
-            this.versioningConfig = versioningConfig;
             this.branchConfig = branchConfig;
-            this.gitExecutor = gitExecutor;
+            this.vcsAdapter = vcsAdapter;
         }
 
-        public ProjectVersion GetProjectVersion()
+        private VersionInfo SelectBaseVersion(IEnumerable<VersionInfo> chronologicVersionInfos, BranchVersioning branchVersioning)
         {
-            var releaseTagPrefix = versioningConfig.ReleaseTagPrefix;
-            var devTagPrefix = versioningConfig.DevTagPrefix;
+            var baseVersion = (branchVersioning.IncrementedPart switch
+            {
+                IncrementedPart.Minor => chronologicVersionInfos.Where(v => (v.Patch == 0) && (v.PreReleaseTag == null)),
+                _ => chronologicVersionInfos.Where(v => v.PreReleaseTag == null),
+            }).Max();
+            baseVersion.BuildNumber = vcsAdapter.GetCommitsCount(baseVersion.BasedOnTag);
+            baseVersion.Revision = baseVersion.BuildNumber;
+            return baseVersion;
+        }
 
-            string currentBranch = GitCurrentBranch();
+        public VersionInfo GetVersionInfo()
+        {
+            string currentBranch = vcsAdapter.GetCurrentBranch();
             var branchVersioning = branchConfig(currentBranch) ?? new();
-            var currentVersion = GitDescribe(new[] { $"{devTagPrefix}*", $"{releaseTagPrefix}*" });
 
-            var correctedMatchPatterns = branchVersioning.IncrementedPart == IncrementedPart.Patch ?
-                    new[] { $"{devTagPrefix}[0-9999]", $"{releaseTagPrefix}[0-9999]", $"{devTagPrefix}[0-9999].[0-9999]", $"{releaseTagPrefix}[0-9999].[0-9999]", $"{devTagPrefix}[0-9999].[0-9999].[0-9999]", $"{releaseTagPrefix}[0-9999].[0-9999].[0-9999]" } :
-                    new[] { $"{devTagPrefix}[0-9999]", $"{releaseTagPrefix}[0-9999]", $"{devTagPrefix}[0-9999].[0-9999]", $"{releaseTagPrefix}[0-9999].[0-9999]", $"{devTagPrefix}[0-9999].[0-9999].0", $"{releaseTagPrefix}[0-9999].[0-9999].0" };
-            var correctedVersion = GitDescribe(correctedMatchPatterns);
+            var chronologicVersionInfos = vcsAdapter.GetChronologicVersionInfos();
+            var headTag = vcsAdapter.GetTagAtHead();
 
-            if (currentVersion.IsBasedOnDevMark)
+            VersionInfo resultVersion = VersionInfo.DefaultInitial;
+            if (chronologicVersionInfos.Any())
             {
-                currentVersion.BuildNumber++;
-                currentVersion.Revision++;
-            }
-            if (correctedVersion.IsBasedOnDevMark)
-            {
-                correctedVersion.BuildNumber++;
-                correctedVersion.Revision++;
-            }
-
-            if (!GitHasCleanWorkingCopy())
-            {
-                currentVersion.BuildNumber++;
-                currentVersion.Revision++;
-                correctedVersion.BuildNumber++;
-                correctedVersion.Revision++;
-            }
-
-            if (currentVersion.BuildNumber != 0)
-            {
-                currentVersion = correctedVersion;
-
-                currentVersion.PreReleaseTag ??= branchVersioning.Tag ?? PreReleaseNormalizer.FromGitBranch(currentBranch);
-
-                if (!currentVersion.IsBasedOnDevMark)
+                if ((headTag != null) && (chronologicVersionInfos.FirstOrDefault()?.BasedOnTag == headTag))
                 {
-                    if (branchVersioning.IncrementedPart == IncrementedPart.Patch)
+                    resultVersion = chronologicVersionInfos.FirstOrDefault();
+                }
+                else
+                {
+                    resultVersion = SelectBaseVersion(chronologicVersionInfos, branchVersioning);
+                }
+            }
+            else
+            {
+                resultVersion.BuildNumber = vcsAdapter.GetCommitsCount();
+                resultVersion.Revision = resultVersion.BuildNumber;
+            }
+
+
+            if (resultVersion.IsBasedOnDevMark)
+            {
+                resultVersion.BuildNumber++;
+                resultVersion.Revision++;
+            }
+
+            if (!vcsAdapter.HasCleanWorkingCopy())
+            {
+                resultVersion.BuildNumber++;
+                resultVersion.Revision++;
+            }
+
+            if (resultVersion.BuildNumber != 0)
+            {
+                resultVersion.PreReleaseTag ??= branchVersioning.Tag ?? PreReleaseNormalizer.FromGitBranch(currentBranch);
+
+                if (!resultVersion.IsBasedOnDevMark)
+                {
+                    switch (branchVersioning.IncrementedPart)
                     {
-                        currentVersion.Patch++;
-                    }
-                    else
-                    {
-                        currentVersion.Minor++;
+                        case IncrementedPart.Patch:
+                            resultVersion.Patch++;
+                            break;
+                        default:
+                            resultVersion.Minor++;
+                            break;
                     }
                 }
             }
             else
             {
-                var versionWithoutCurrentTag = GitDescribe(correctedMatchPatterns,
-                    (currentVersion.BasedOnGitTag != null) ? new[] { currentVersion.BasedOnGitTag } : null);
-
-                if (versionWithoutCurrentTag.Major == currentVersion.Major
-                    && versionWithoutCurrentTag.Minor == currentVersion.Minor
-                    && versionWithoutCurrentTag.Patch == currentVersion.Patch)
+                var baseVersionWithoutHead = SelectBaseVersion(chronologicVersionInfos.Where(v => v.BasedOnTag != headTag), branchVersioning);
+                if (baseVersionWithoutHead.Major == resultVersion.Major
+                    && baseVersionWithoutHead.Minor == resultVersion.Minor
+                    && baseVersionWithoutHead.Patch == resultVersion.Patch)
                 {
-                    currentVersion.Revision = versionWithoutCurrentTag.BuildNumber + 1;
+                    resultVersion.Revision = baseVersionWithoutHead.BuildNumber + 1;
                 }
-
             }
 
-            return currentVersion;
-        }
-
-        private bool GitHasCleanWorkingCopy()
-        {
-            return !gitExecutor?.Invoke("status --short")?.Any() ?? false;
-        }
-
-        private string GitCurrentBranch()
-        {
-            return gitExecutor?.Invoke("rev-parse --abbrev-ref HEAD")?.SingleOrDefault();
-        }
-
-        private ProjectVersion GitDescribe(string[] matches = null, string[] excludes = null)
-        {
-            string matchParam = "";
-            if (matches != null)
-            {
-                matchParam += string.Join(' ', matches.Select(m => $"--match \"{m}\""));
-            }
-            string excludeParam = "";
-            if (excludes != null)
-            {
-                excludeParam += string.Join(' ', excludes.Select(e => $"--exclude \"{e}\""));
-            }
-            return GitTagParser.Parse(gitExecutor?.Invoke($"describe --tags --first-parent {matchParam} {excludeParam}")?.FirstOrDefault(), versioningConfig);
+            return resultVersion;
         }
     }
 }

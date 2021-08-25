@@ -9,7 +9,7 @@ namespace AWZhome.GutenTag
         CIBuild
     }
 
-    public class ProjectVersion : IComparable<ProjectVersion>
+    public class VersionInfo : IComparable<VersionInfo>
     {
         public int Major { get; set; }
         public int Minor { get; set; }
@@ -18,7 +18,7 @@ namespace AWZhome.GutenTag
         public int BuildNumber { get; set; }
         public int Revision { get; set; }
         public bool IsBasedOnDevMark { get; set; } = false;
-        public string BasedOnGitTag { get; set; }
+        public string BasedOnTag { get; set; }
 
         public VersionType Type
         {
@@ -42,20 +42,8 @@ namespace AWZhome.GutenTag
             }
         }
 
-        public int CompareTo(ProjectVersion other)
+        public int CompareTo(VersionInfo other)
         {
-            if (BuildNumber == 0 && other?.BuildNumber == 0)
-            {
-                if (!IsBasedOnDevMark && other.IsBasedOnDevMark)
-                {
-                    return -1;
-                }
-                else if (IsBasedOnDevMark && !other.IsBasedOnDevMark)
-                {
-                    return 1;
-                }
-            }
-
             int majorCompare = Major.CompareTo(other?.Major);
             if (majorCompare != 0)
                 return majorCompare;
@@ -72,6 +60,18 @@ namespace AWZhome.GutenTag
             if (revisionCompare != 0)
                 return revisionCompare;
 
+            if (BuildNumber == 0 && other?.BuildNumber == 0)
+            {
+                if (!IsBasedOnDevMark && other.IsBasedOnDevMark)
+                {
+                    return 1;
+                }
+                else if (IsBasedOnDevMark && !other.IsBasedOnDevMark)
+                {
+                    return -1;
+                }
+            }
+
             string preReleaseTag = PreReleaseTag ?? string.Empty;
             string otherPreReleaseTag = other?.PreReleaseTag ?? string.Empty;
             if (preReleaseTag != otherPreReleaseTag)
@@ -80,6 +80,6 @@ namespace AWZhome.GutenTag
             return 0;
         }
 
-        public static ProjectVersion DefaultInitial => new() { Minor = 1, IsBasedOnDevMark = true };
+        public static VersionInfo DefaultInitial => new() { Minor = 1, IsBasedOnDevMark = true };
     }
 }
