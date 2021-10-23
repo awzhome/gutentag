@@ -53,11 +53,12 @@ namespace AWZhome.GutenTag
 
             var chronologicVersionInfos = vcsAdapter.GetChronologicVersionInfos();
             var headTag = vcsAdapter.GetTagAtHead();
+            var hasCleanWorkingCopy = vcsAdapter.HasCleanWorkingCopy();
 
             VersionInfo resultVersion = VersionInfo.DefaultInitial;
             if (chronologicVersionInfos.Any())
             {
-                if ((headTag != null) && (chronologicVersionInfos.FirstOrDefault()?.BasedOnTag == headTag))
+                if (hasCleanWorkingCopy && (headTag != null) && (chronologicVersionInfos.FirstOrDefault()?.BasedOnTag == headTag))
                 {
                     resultVersion = chronologicVersionInfos.FirstOrDefault();
                 }
@@ -79,7 +80,7 @@ namespace AWZhome.GutenTag
                 resultVersion.Revision++;
             }
 
-            if (!vcsAdapter.HasCleanWorkingCopy())
+            if (!hasCleanWorkingCopy)
             {
                 resultVersion.BuildNumber++;
                 resultVersion.Revision++;

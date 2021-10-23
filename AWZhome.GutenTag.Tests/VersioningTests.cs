@@ -406,6 +406,31 @@ namespace AWZhome.GutenTag.Tests
         }
 
         [Fact]
+        public void MajorPreReleaseAfterDevMarkForSameVersion_DifferentPreReleaseTag_DirtyWorkingCopy()
+        {
+            VersioningConfig versioningConfig = new();
+            static BranchVersioning branchConfig(string _) => new() { IncrementedPart = IncrementedPart.Patch };
+            var git = new TestVcsAdapter(versioningConfig)
+            {
+                CurrentBranch = "main",
+                IsCleanWorkingCopy = false,
+                ChronologicAncestorTags = new[] { ("v2.0-beta", 0), ("dev-2.0", 5), ("v1.0", 10) },
+            };
+            Versioning versioning = new(branchConfig, git);
+            var version = versioning.GetVersionInfo();
+
+            Assert.Equal("dev-2.0", version.BasedOnTag);
+            Assert.Equal(2, version.Major);
+            Assert.Equal(0, version.Minor);
+            Assert.Equal(0, version.Patch);
+            Assert.Equal(7, version.BuildNumber);
+            Assert.Equal(7, version.Revision);
+            Assert.Equal("main", version.PreReleaseTag);
+            Assert.True(version.IsBasedOnDevMark);
+            Assert.Equal(VersionType.CIBuild, version.Type);
+        }
+
+        [Fact]
         public void MajorPreReleaseAfterDevMarkForSameVersion_SamePreReleaseTag()
         {
             VersioningConfig versioningConfig = new();
@@ -428,6 +453,31 @@ namespace AWZhome.GutenTag.Tests
             Assert.Equal("rc", version.PreReleaseTag);
             Assert.False(version.IsBasedOnDevMark);
             Assert.Equal(VersionType.PreRelease, version.Type);
+        }
+
+        [Fact]
+        public void MajorPreReleaseAfterDevMarkForSameVersion_SamePreReleaseTag_DirtyWorkingCopy()
+        {
+            VersioningConfig versioningConfig = new();
+            static BranchVersioning branchConfig(string _) => new() { IncrementedPart = IncrementedPart.Patch };
+            var git = new TestVcsAdapter(versioningConfig)
+            {
+                CurrentBranch = "rc",
+                IsCleanWorkingCopy = false,
+                ChronologicAncestorTags = new[] { ("v2.0-rc", 0), ("dev-2.0", 5), ("v1.0", 10) },
+            };
+            Versioning versioning = new(branchConfig, git);
+            var version = versioning.GetVersionInfo();
+
+            Assert.Equal("dev-2.0", version.BasedOnTag);
+            Assert.Equal(2, version.Major);
+            Assert.Equal(0, version.Minor);
+            Assert.Equal(0, version.Patch);
+            Assert.Equal(7, version.BuildNumber);
+            Assert.Equal(7, version.Revision);
+            Assert.Equal("rc", version.PreReleaseTag);
+            Assert.True(version.IsBasedOnDevMark);
+            Assert.Equal(VersionType.CIBuild, version.Type);
         }
 
         [Fact]
