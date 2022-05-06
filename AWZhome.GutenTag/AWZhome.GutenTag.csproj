@@ -1,7 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net5.0</TargetFramework>
+		<TargetFramework>net6.0</TargetFramework>
 		<Authors>Andreas Weizel</Authors>
 		<Company>Andreas Weizel</Company>
 		<Product>GutenTag Versioning Helper</Product>
@@ -10,9 +10,9 @@
 		<PackageProjectUrl>https://github.com/awzhome/gutentag</PackageProjectUrl>
 		<RepositoryType>git</RepositoryType>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<Version>1.0-preview.2</Version>
-		<AssemblyVersion>1.0.0.2</AssemblyVersion>
-		<FileVersion>1.0.0.2</FileVersion>
+		<Version>1.0-preview.29</Version>
+		<AssemblyVersion>1.0.0.29</AssemblyVersion>
+		<FileVersion>1.0.0.29</FileVersion>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<Description>Library allowing a light-weight way to provide semantic versioning of projects using Git tags.</Description>
 		<PackageTags>git versioning version semver</PackageTags>

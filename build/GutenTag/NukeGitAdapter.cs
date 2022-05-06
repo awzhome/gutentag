@@ -11,7 +11,7 @@ namespace AWZhome.GutenTag.Nuke
         {
         }
 
-        public override IEnumerable<string> ExecuteGit(string commandLine) => 
-            Git(commandLine, null, null, default, false, false, false).Select(o => o.Text);
+        public override IEnumerable<string> ExecuteGit(string commandLine) =>
+            Git(commandLine, null, null, default, false, false).Select(o => o.Text);
     }
 }
