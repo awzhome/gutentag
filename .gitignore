@@ -5,3 +5,5 @@ output/
 *.user
 .vs/
 .nuke/temp/
+.fake
+.DS_Store
